@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Header, TextInput} from '../../components/molecules/';
-import {Button, Gap} from '../../components/atoms/';
+import {Header, TextInput} from '../../components/molecules';
+import {Button, Gap} from '../../components/atoms';
 import AddPhoto from '../../components/atoms/AddPhoto';
 
-const SignIn = () => {
+const SignUp = () => {
   return (
     <View style={styles.pageContainer}>
       <Header title="Sign Up" onBack={() => console.log('Go back')} />
@@ -31,7 +31,7 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
 
 const styles = StyleSheet.create({
   pageContainer: {
