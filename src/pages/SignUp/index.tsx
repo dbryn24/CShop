@@ -1,20 +1,33 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Header, TextInput} from '../../components/molecules';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+} from 'react-native';
 import {Button, Gap} from '../../components/atoms';
-import AddPhoto from '../../components/atoms/AddPhoto';
+import {Header, TextInput} from '../../components/molecules';
+// import {NullPhoto} from '../../assets';
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   return (
-    <View style={styles.pageContainer}>
-      <Header title="Sign Up" onBack={() => console.log('Go back')} />
-      <View style={styles.contentContainer}>
-        <View style={styles.photoContainer}>
-          <AddPhoto />
+    <ScrollView style={styles.container}>
+      <Header title="Sign Up" />
+      <Gap height={24} />
+      <View style={styles.contentWrapper}>
+        <View style={styles.profileContainer}>
+          <View style={styles.profile}>
+            <View style={styles.addPhoto}>
+              <TouchableOpacity activeOpacity={0.5}>
+                <Text style={styles.addPhotoLabel}>Add Photo</Text>
+                {/* <Image source={NullPhoto} style={styles.avatar} /> */}
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-
-        <Gap height={24} />
-
+        <Gap height={26} />
         <TextInput label="Full Name" placeholder="Type your full name" />
         <Gap height={16} />
         <TextInput
@@ -24,28 +37,58 @@ const SignUp = () => {
         <Gap height={16} />
         <TextInput label="Password" placeholder="Type your password" />
         <Gap height={24} />
-        <Button label="Continue" />
-        <Gap height={12} />
+        <Button
+          label="Continue"
+          onPress={() => navigation.navigate('SignIn')}
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 export default SignUp;
 
 const styles = StyleSheet.create({
-  pageContainer: {
+  container: {
     flex: 1,
   },
-  contentContainer: {
-    paddingTop: 152,
+  contentWrapper: {
     backgroundColor: '#FFFFFF',
-    marginTop: 24,
     flex: 1,
     paddingHorizontal: 24,
   },
-  photoContainer: {
+  profileContainer: {
+    marginTop: 26,
     alignItems: 'center',
-    marginTop: -115,
+  },
+  profile: {
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 110,
+    width: 110,
+    borderRadius: 110 / 2,
+    borderWidth: 1,
+    borderColor: '#8D92A3',
+    borderStyle: 'dashed',
+  },
+  addPhoto: {
+    backgroundColor: '#F0F0F0',
+    width: 90,
+    height: 90,
+    borderRadius: 90 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addPhotoLabel: {
+    fontFamily: 'Poppins-Light',
+    fontSize: 14,
+    width: 40,
+    textAlign: 'center',
+  },
+  avatar: {
+    height: 90,
+    width: 90,
+    borderRadius: 90 / 2,
   },
 });
