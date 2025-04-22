@@ -1,16 +1,18 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Example library
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  StatusBar,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const Header = ({title, onBack, leftIcon}) => {
+const Header = ({title, onBack, leftIcon, color = '#FD7014'}) => {
   return (
     <View style={styles.container}>
-      {onBack && (
-        <TouchableOpacity onPress={onBack} style={styles.iconContainer}>
-          <Icon name={leftIcon || 'arrow-back'} size={24} color="#000" />
-        </TouchableOpacity>
-      )}
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, {color}]}>{title}</Text>
     </View>
   );
 };
@@ -21,14 +23,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  iconContainer: {
-    marginRight: 8,
+    paddingTop: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
+    fontFamily: 'Poppins-Medium',
   },
 });
