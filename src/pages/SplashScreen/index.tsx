@@ -4,7 +4,11 @@ import Logo from '../../assets/pictures/logo.png';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
+<<<<<<< HEAD
     setTimeout(() => navigation.replace('Profile'), 3000);
+=======
+    setTimeout(() => navigation.replace('PaymentMethod'), 3000);
+>>>>>>> 3fb0b09bc734d824e146dad618fc8bedb621309f
   }, []);
 
   return (

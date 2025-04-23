@@ -14,7 +14,7 @@ export default Button;
 const styles = StyleSheet.create({
   button: color => ({
     backgroundColor: color,
-    borderRadius: 8,
+    borderRadius: 30,
     paddingVertical: 12,
   }),
   label: textColor => ({

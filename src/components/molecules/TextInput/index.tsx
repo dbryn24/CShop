@@ -14,14 +14,17 @@ export default TextInput;
 
 const styles = StyleSheet.create({
   label: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins Medium',
     fontSize: 16,
     marginBottom: 6,
+    color: '#FFFFFF',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#020202',
+    borderColor: '#000000',
     borderRadius: 8,
     padding: 10,
+    color: '#000000',
+    backgroundColor: '#D9D9D9',
   },
 });

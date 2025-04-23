@@ -1,30 +1,34 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import {Button, Gap} from '../../components/atoms/';
 import {Header, TextInput} from '../../components/molecules/';
+import Logo from '../../assets/pictures/logo.png';
+import TxtButton from '../../components/atoms/TxtButton';
 
 const SignIn = ({navigation}) => {
   return (
-    <View style={styles.pageContainer}>
+    <View style={styles.contentContainer}>
       <Header title="Sign In" />
-      <View style={styles.contentContainer}>
-        <Gap height={26} />
-        <TextInput
-          label="Email Address"
-          placeholder="Type your email address"
-        />
-        <Gap height={16} />
-        <TextInput label="Password" placeholder="Type your password" />
-        <Gap height={24} />
-        <Button label="Sign In" />
-        <Gap height={12} />
-        <Button
-          label="Create New Account"
-          color="#8D92A3"
-          textColor="#FFFFFF"
-          onPress={() => navigation.navigate('SignUp')}
-        />
+      <View style={styles.logoContainer}>
+        <Image source={Logo} style={styles.logo} />
       </View>
+      <TextInput label="Username" placeholder="Type your email address" />
+      <Gap height={28} />
+      <TextInput label="Password" placeholder="Type your password" />
+      <Gap height={28} />
+      <TxtButton
+        label="Lupa password?"
+        onPress={() => navigation.navigate('ForgotPassword')}
+      />
+      <Gap height={32} />
+      <Button label="Sign In" color="#FD7014" textColor="#000000" />
+      <Gap height={32} />
+      <Button
+        label="Create New Account"
+        color="#50577A"
+        textColor="#FFFFFF"
+        onPress={() => navigation.navigate('SignUp')}
+      />
     </View>
   );
 };
@@ -32,12 +36,15 @@ const SignIn = ({navigation}) => {
 export default SignIn;
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
+  logoContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    width: 300,
+    height: 300,
   },
   contentContainer: {
-    backgroundColor: '#FFFFFF',
-    marginTop: 24,
+    backgroundColor: '#222831',
     flex: 1,
     paddingHorizontal: 24,
   },
