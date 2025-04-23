@@ -5,6 +5,7 @@ import SignIn from './src/pages/SignIn';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import PaymentMethod from './src/pages/PaymentMethod';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,11 @@ const App = () => {
         <Stack.Screen
           name="SignUp"
           component={SignUp}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PaymentMethod"
+          component={PaymentMethod}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
