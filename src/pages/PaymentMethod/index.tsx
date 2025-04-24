@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
   emailandnumber: {
     fontFamily: 'Poppins-Medium',
     fontSize: 18,
-    color: '#ffffff'
+    color: '#ffffff',
+    fontWeight: 'bold'
   },
   PersonalInfo: {
     gap: 10,
