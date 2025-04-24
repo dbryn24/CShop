@@ -4,6 +4,7 @@ import {Gap} from '../../components/atoms/';
 import Fotoprofile from '../../assets/pictures/fotoprofile.png';
 import IconEdit from '../../assets/pictures/Vector.svg';
 import BackIcon from '../../assets/pictures/backIcon.svg';
+import CameraIcon from '../../assets/pictures/camera.svg'; // Kamera ditambahkan
 
 // Icon navigasi bawah
 import HomeIcon from '../../assets/pictures/home.svg';
@@ -30,42 +31,46 @@ const Profile = () => {
 
       {/* Konten Utama */}
       <View style={styles.contentContainer}>
-        {/* Foto dan Nama */}
+        {/* Foto dan tombol kamera */}
         <View style={styles.profileSection}>
           <Image source={Fotoprofile} style={styles.profileImage} />
-          <TouchableOpacity style={styles.addPhotoButton}>
-            <Text style={styles.plus}>+</Text>
+          <TouchableOpacity style={styles.cameraButton}>
+            <CameraIcon width={24} height={24} />
           </TouchableOpacity>
-          <Text style={styles.profileName}>Ame Ochibana</Text>
         </View>
 
         {/* Info Akun */}
         <View style={styles.infoSection}>
           <Text style={styles.label}>Username</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>AmeLike04</Text>
-            <IconEdit width={20} height={20} />
+            <Text style={styles.infoTextLarge}>AmeLike04</Text>
+            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
           </View>
 
-          <Gap height={20} />
+          <Gap height={25} />
 
           <Text style={styles.label}>Email</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>Ochibana@gmail.com</Text>
-            <IconEdit width={20} height={20} />
+            <Text style={styles.infoTextLarge}>Ochibana@gmail.com</Text>
+            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
           </View>
 
-          <Gap height={20} />
+          <Gap height={25} />
 
           <Text style={styles.label}>Phone Number</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>+62 - 8136 - 8307 - 342</Text>
-            <IconEdit width={20} height={20} />
+            <Text style={styles.infoTextLarge}>+62 - 8136 - 8307 - 342</Text>
+            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
           </View>
+
+          {/* Tombol Simpan */}
+          <TouchableOpacity style={styles.saveButton}>
+            <Text style={styles.saveButtonText}>Simpan</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Bottom white container */}
+      {/* Bottom navigation */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => setActiveTab('Home')}>
@@ -90,11 +95,7 @@ const Profile = () => {
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('History')}>
-            {activeTab === 'History' ? (
-              <HistoryIconFill width={25} height={25} />
-            ) : (
-              <HistoryIcon width={25} height={25} />
-            )}
+            <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('Profile')}>
             {activeTab === 'Profile' ? (
@@ -130,47 +131,52 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   profileImage: {
-    width: 140,
-    height: 140,
+    width: 180,
+    height: 180,
     borderRadius: 70,
   },
-  addPhotoButton: {
+  cameraButton: {
     position: 'absolute',
-    right: 140 / 2 - 10,
     bottom: 10,
-    backgroundColor: 'orange',
-    width: 24,
-    height: 24,
+    right: 100,
+    backgroundColor: 'white',
+    padding: 4,
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  plus: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  profileName: {
-    color: '#ADB5BD',
-    fontSize: 18,
-    marginTop: 15,
   },
   infoSection: {
-    marginTop: 30,
+    marginTop: 40,
   },
   label: {
     color: 'orange',
-    fontSize: 12,
-    marginBottom: 6,
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: '#222831',
+    borderBottomWidth: 1,
+    borderBottomColor: '#393E46',
+    paddingVertical: 10,
   },
-  infoText: {
+  infoTextLarge: {
     color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  saveButton: {
+    backgroundColor: 'orange',
+    borderRadius: 20,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  saveButtonText: {
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   bottomNavContainer: {
     height: 70,
