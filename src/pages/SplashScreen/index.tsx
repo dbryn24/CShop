@@ -4,7 +4,7 @@ import Logo from '../../assets/pictures/logo.png';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => navigation.replace('Chatpage'), 3000);
+    setTimeout(() => navigation.replace('History'), 3000);
   }, []);
 
   return (

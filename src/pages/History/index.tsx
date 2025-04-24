@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {Gap} from '../../components/atoms/';
-import Fotoprofile from '../../assets/pictures/fotoprofile.png';
-import IconEdit from '../../assets/pictures/Vector.svg';
-import BackIcon from '../../assets/pictures/backIcon.svg';
-import CameraIcon from '../../assets/pictures/camera.svg'; // Kamera ditambahkan
 
-// Icon navigasi bawah
+// Gambar produk
+import StikPS from '../../assets/pictures/stik.png';
+import Sepatu from '../../assets/pictures/spatu.png';
+
+// Icon navigasi
+import BackIcon from '../../assets/pictures/backIcon.svg';
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
 import CartIcon from '../../assets/pictures/cart.svg';
@@ -19,58 +19,52 @@ import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
-const Profile = () => {
-  const [activeTab, setActiveTab] = useState('Profile');
+const History = () => {
+  const [activeTab, setActiveTab] = useState('History');
 
   return (
     <View style={styles.container}>
-      {/* Tombol kembali */}
-      <TouchableOpacity style={styles.backButton}>
-        <BackIcon width={30} height={30} />
-      </TouchableOpacity>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity>
+          <BackIcon width={40} height={40} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>History</Text>
+        <View style={{width: 30}} />
+      </View>
 
-      {/* Konten Utama */}
-      <View style={styles.contentContainer}>
-        {/* Foto dan tombol kamera */}
-        <View style={styles.profileSection}>
-          <Image source={Fotoprofile} style={styles.profileImage} />
-          <TouchableOpacity style={styles.cameraButton}>
-            <CameraIcon width={24} height={24} />
-          </TouchableOpacity>
+      {/* Konten History */}
+      <View style={styles.historyCard}>
+        <Text style={styles.buyerName}>Rusdi</Text>
+
+        {/* Produk 1 */}
+        <View style={styles.itemRow}>
+          <Image source={StikPS} style={styles.productImage} />
+          <View>
+            <Text style={styles.productName}>Plastation 1 controller</Text>
+            <Text style={styles.productPrice}>x 1 Rp. 70.000</Text>
+          </View>
         </View>
 
-        {/* Info Akun */}
-        <View style={styles.infoSection}>
-          <Text style={styles.label}>Username</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>AmeLike04</Text>
-            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
+        <View style={styles.divider} />
+
+        {/* Produk 2 */}
+        <View style={styles.itemRow}>
+          <Image source={Sepatu} style={styles.productImage} />
+          <View>
+            <Text style={styles.productName}>sepatu pria</Text>
+            <Text style={styles.productPrice}>x 1 Rp. 690.000</Text>
           </View>
+        </View>
 
-          <Gap height={25} />
-
-          <Text style={styles.label}>Email</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>Ochibana@gmail.com</Text>
-            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
-          </View>
-
-          <Gap height={25} />
-
-          <Text style={styles.label}>Phone Number</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>+62 - 8136 - 8307 - 342</Text>
-            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
-          </View>
-
-          {/* Tombol Simpan */}
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Simpan</Text>
-          </TouchableOpacity>
+        {/* Total */}
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalLabel}>Total</Text>
+          <Text style={styles.totalPrice}>Rp. 760.000</Text>
         </View>
       </View>
 
-      {/* Bottom navigation */}
+      {/* Bottom Navigation */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => setActiveTab('Home')}>
@@ -110,76 +104,88 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default History;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#222831',
     paddingTop: 20,
+    paddingBottom: 80, // Untuk memberi ruang agar tidak tertutup nav
   },
-  backButton: {
-    marginLeft: 25,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
     marginBottom: 10,
   },
-  contentContainer: {
-    flex: 1,
-    paddingHorizontal: 25,
+  headerTitle: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: 'bold',
   },
-  profileSection: {
-    alignItems: 'center',
-    marginTop: 20,
+  historyCard: {
+    marginHorizontal: 20,
+    backgroundColor: '#3A4750',
+    borderRadius: 10,
+    padding: 15,
   },
-  profileImage: {
-    width: 180,
-    height: 180,
-    borderRadius: 70,
-  },
-  cameraButton: {
-    position: 'absolute',
-    bottom: 10,
-    right: 100,
-    backgroundColor: 'white',
-    padding: 4,
-    borderRadius: 12,
-  },
-  infoSection: {
-    marginTop: 40,
-  },
-  label: {
+  buyerName: {
     color: 'orange',
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  infoRow: {
+  itemRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#222831',
-    borderBottomWidth: 1,
-    borderBottomColor: '#393E46',
-    paddingVertical: 10,
+    marginBottom: 12,
   },
-  infoTextLarge: {
+  productImage: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 6,
+  },
+  productName: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: '500',
+  },
+  productPrice: {
+    color: 'orange',
+    fontSize: 18,
+    marginTop: 4,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#999',
+    marginVertical: 8,
+  },
+  totalContainer: {
+    backgroundColor: '#EEEEEE',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  totalLabel: {
     fontWeight: 'bold',
-    fontFamily: 'Poppins-Medium',
-  },
-  saveButton: {
-    backgroundColor: 'orange',
-    borderRadius: 20,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  saveButtonText: {
-    color: 'white',
     fontSize: 16,
+    color: '#000',
+  },
+  totalPrice: {
     fontWeight: 'bold',
+    fontSize: 16,
+    color: '#000',
   },
   bottomNavContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     height: 70,
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,

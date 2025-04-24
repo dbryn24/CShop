@@ -8,6 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PaymentMethod from './src/pages/PaymentMethod';
 import Chatpage from './src/pages/Chatpage';
+import History from './src/pages/History';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,11 @@ const App = () => {
         <Stack.Screen
           name="Chatpage"
           component={Chatpage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
