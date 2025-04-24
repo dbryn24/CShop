@@ -164,7 +164,8 @@ const styles = StyleSheet.create({
   infoTextLarge: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: 'bold',
+    fontFamily: 'Poppins-Medium'
   },
   saveButton: {
     backgroundColor: 'orange',
