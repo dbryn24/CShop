@@ -2,6 +2,7 @@ import React from 'react';
 import SplashScreen from './src/pages/SplashScreen';
 import SignUp from './src/pages/SignUp';
 import SignIn from './src/pages/SignIn';
+import FlashMessage from 'react-native-flash-message';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -28,6 +29,7 @@ const App = () => {
           options={{headerShown: false}}
         />
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 };
