@@ -4,7 +4,7 @@ import Logo from '../../assets/pictures/logo.png';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => navigation.replace('CheckoutScreen'), 3000);
+    setTimeout(() => navigation.replace('CartPage'), 3000);
   }, []);
 
   return (

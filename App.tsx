@@ -10,6 +10,7 @@ import PaymentMethod from './src/pages/PaymentMethod';
 import Chatpage from './src/pages/Chatpage';
 import History from './src/pages/History';
 import CheckoutScreen from './src/pages/CheckoutScreen';
+import ChartPage from './src/pages/CartPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,11 @@ const App = () => {
         <Stack.Screen
           name="History"
           component={History}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CartPage"
+          component={ChartPage}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

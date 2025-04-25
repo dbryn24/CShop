@@ -57,7 +57,7 @@ const CheckoutScreen = () => {
             textColor="#FFFFFF"
             subText="X1 Rp. 690.000"
           />
-          <TrashIcon width={40} height={40} marginLeft={60} marginTop={40}/>
+          <TrashIcon width={40} height={40} marginLeft={65} marginTop={40}/>
           </View>
         </View>
       </View>
