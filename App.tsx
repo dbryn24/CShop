@@ -9,6 +9,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PaymentMethod from './src/pages/PaymentMethod';
 import Chatpage from './src/pages/Chatpage';
 import History from './src/pages/History';
+import CheckoutScreen from './src/pages/CheckoutScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,11 @@ const App = () => {
         <Stack.Screen
           name="PaymentMethod"
           component={PaymentMethod}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CheckoutScreen"
+          component={CheckoutScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen

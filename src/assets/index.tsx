@@ -8,6 +8,7 @@ import BRI from './pictures/david/BRI.png';
 import ProfilePict from './pictures/fotoprofile.png';
 import emailIcon from './pictures/emailIcon.svg'
 import telephoneIcon from './pictures/telephoneIcon.svg'
+import StickPS from './pictures/david/StickPS.png'
 
 
-export {Logo, BackIcon,BNI, DANA, GOPAY, OVO, BRI, ProfilePict, telephoneIcon, emailIcon};
+export {Logo, BackIcon,BNI, DANA, GOPAY, OVO, BRI, ProfilePict, telephoneIcon, emailIcon, StickPS};

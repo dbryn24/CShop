@@ -60,7 +60,7 @@ const PaymentMethod = () => {
           <PMButton imageSource={BRI} label="Bank BRI" textColor="#FFFFFF" />
         </View>
       </View>
-      <Gap height={21} />
+      <Gap height={20} />
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => setActiveTab('Home')}>
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
+    paddingTop: -15,
   },
   navRow: {
     flexDirection: 'row',
