@@ -35,7 +35,7 @@ const PaymentMethod = () => {
         <View style={styles.userInfo}>
           <Image source={ProfilePict} style={styles.profileImage} />
           <View style={styles.PersonalInfo}>
-          <Gap height={20} />
+          <Gap height={25} />
             <View style={styles.number}>
               <Image source={telephoneIcon} style={styles.phoneIcon} />
               <Text style={styles.emailandnumber}>+62 - 8136 - 8307 - 342</Text>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginHorizontal: 27,
     flexDirection: 'row',
-    gap: 10,
+    gap: 4,
   },
   Method: {
     backgroundColor: '#50577A',
