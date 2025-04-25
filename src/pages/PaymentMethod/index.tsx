@@ -35,7 +35,7 @@ const PaymentMethod = () => {
         <View style={styles.userInfo}>
           <Image source={ProfilePict} style={styles.profileImage} />
           <View style={styles.PersonalInfo}>
-          <Gap height={20} />
+            <Gap height={20} />
             <View style={styles.number}>
               <Image source={telephoneIcon} style={styles.phoneIcon} />
               <Text style={styles.emailandnumber}>+62 - 8136 - 8307 - 342</Text>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   emailandnumber: {
     fontFamily: 'Poppins-Medium',
     fontSize: 18,
-    color: '#ffffff'
+    color: '#ffffff',
   },
   PersonalInfo: {
     gap: 10,
