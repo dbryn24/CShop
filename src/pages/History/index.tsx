@@ -19,7 +19,7 @@ import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
-const History = () => {
+const History = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('History');
 
   return (

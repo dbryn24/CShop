@@ -11,6 +11,7 @@ import Chatpage from './src/pages/Chatpage';
 import History from './src/pages/History';
 import CheckoutScreen from './src/pages/CheckoutScreen';
 import ChartPage from './src/pages/CartPage';
+import ProductPage from './src/pages/ProductPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,11 @@ const App = () => {
         <Stack.Screen
           name="CartPage"
           component={ChartPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProductPage"
+          component={ProductPage}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

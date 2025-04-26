@@ -19,7 +19,7 @@ import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Profile');
 
   return (
@@ -87,7 +87,7 @@ const Profile = () => {
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Cart')}>
+          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (

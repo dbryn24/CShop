@@ -1,7 +1,6 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import {
-  Button,
   Gap,
   PMButton,
   BackButton,
@@ -15,6 +14,7 @@ import OVO from '../../assets/pictures/david/OVO.png';
 import BNI from '../../assets/pictures/david/BNI.png';
 import BRI from '../../assets/pictures/david/BRI.png';
 import BackIcon from '../../assets/pictures/david/backIcon.png';
+import KaosHitam from '../../assets/pictures/david/KaosDesign.png';
 import HDMI from '../../assets/pictures/david/hdmi.png';
 import TxtButton from '../../components/atoms/TxtButton';
 import HomeIcon from '../../assets/pictures/home.svg';
@@ -31,63 +31,47 @@ import emailIcon from '../../assets/pictures/emailIcon.png';
 import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
-const ChartPage = ({navigation}) => {
-  const [activeTab, setActiveTab] = useState('Profile');
+
+const ProductPage = () => {
+  const [activeTab, setActiveTab] = useState('');
+
   return (
     <View style={styles.container}>
-      <Gap height={10} />
+      {/* Header */}
       <View style={styles.header}>
         <BackButton
           imageSource={BackIcon}
-          width={50} // Atur lebar sesuai kebutuhan
-          height={45} // Atur tinggi sesuai kebutuhan
+          width={50}
+          height={45}
         />
-        <SearchInput placeholder="Search" />
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.contentInside}>
-          <Gap height={10} />
-          <Text style={styles.rusdi}>Rusdi</Text>
-          <Gap height={10} />
-          <View style={styles.testing}>
-            <COButton
-              imageSource={StickPS}
-              label="plastation 1 controller"
-              textColor="#FFFFFF"
-              subText="X1 Rp. 70.000"
-            />
-            <TrashIcon width={40} height={40} marginLeft={-30} marginTop={40} />
-          </View>
-          <View style={styles.testing}>
-            <Gap height={20} />
-            <COButton
-              imageSource={Spatu}
-              label="sepatu pria"
-              textColor="#FFFFFF"
-              subText="X1 Rp. 690.000"
-            />
-            <TrashIcon width={40} height={40} marginLeft={65} marginTop={40} />
-          </View>
+        <View style={{ flex: 1, marginLeft: 10 }}>
+          <SearchInput placeholder="Search" />
         </View>
       </View>
-      <Gap height={15} />
-      <View style={styles.contentContainer2}>
-        <View style={styles.contentInside}>
-          <Gap height={10} />
-          <Text style={styles.rusdi}>Fuad</Text>
-          <Gap height={10} />
-          <View style={styles.testing}>
-            <COButton
-              imageSource={HDMI}
-              label="Connector HDMI"
-              textColor="#FFFFFF"
-              subText="X1 Rp. 70.000"
-            />
-            <TrashIcon width={40} height={40} marginLeft={15} marginTop={40} />
-          </View>
+      <Gap height={20} />
+
+      {/* Konten scrollable */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.GambarContainer}>
+          <Image source={KaosHitam} style={styles.gambarKaos} />
         </View>
-      </View>
-      <Gap height={111} />
+        <Gap height={15} />
+        <View style={styles.containerTulisan}>
+          <Text style={styles.tulisanProduk}>Kaos Hitam Legam</Text>
+          <Text style={styles.tulisanHarga}>Rp. 50.000</Text>
+          <View style={styles.tulisanContainer}></View>
+          <Gap height={35} />
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+        </View>
+        <Gap height={20} />
+        {/* Tambahkan konten lainnya di sini */}
+      </ScrollView>
+
+      {/* Bottom Navbar */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => setActiveTab('Home')}>
@@ -104,7 +88,7 @@ const ChartPage = ({navigation}) => {
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
+          <TouchableOpacity onPress={() => setActiveTab('Cart')}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
@@ -118,11 +102,7 @@ const ChartPage = ({navigation}) => {
               <HistoryIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setActiveTab('Profile');
-              navigation.navigate('Profile');
-            }}>
+          <TouchableOpacity onPress={() => setActiveTab('Profile')}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (
@@ -135,7 +115,7 @@ const ChartPage = ({navigation}) => {
   );
 };
 
-export default ChartPage;
+export default ProductPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -144,39 +124,31 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
+    alignItems: 'center',
+
   },
-  contentContainer: {
-    backgroundColor: '#50577A',
-    marginTop: 20,
-    width: 360,
-    height: 350,
-    borderRadius: 10,
-    marginHorizontal: 25,
-    flexDirection: 'row',
-    gap: 10,
+  scrollContent: {
+    paddingBottom: 100, // Tambahan agar tidak ketutupan navbar
   },
-  contentContainer2: {
-    backgroundColor: '#50577A',
-    marginTop: 20,
-    width: 360,
-    height: 200,
-    borderRadius: 10,
-    marginHorizontal: 25,
-    flexDirection: 'row',
-    gap: 10,
+  GambarContainer: {
+    width: '100%',
+    height: 400,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  contentInside: {
-    flexDirection: 'column',
+  gambarKaos: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
-  rusdi: {
-    fontSize: 20,
+  tulisanProduk: {
     fontFamily: 'Poppins-Medium',
-    color: '#FD7014',
+    fontSize: 30,
     fontWeight: 'bold',
-    marginLeft: 20,
+    color: '#fff',
   },
-  testing: {
-    flexDirection: 'row',
+  containerTulisan: {
+    marginLeft: 30,
   },
   bottomNavContainer: {
     height: 70,
@@ -190,10 +162,19 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
-    paddingTop: -15,
+    position: 'absolute',  // <---- Fix: navbar diposisikan absolute
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  tulisanHarga: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
