@@ -3,15 +3,19 @@ import SplashScreen from './src/pages/SplashScreen';
 import SignUp from './src/pages/SignUp';
 import SignIn from './src/pages/SignIn';
 import Profile from './src/pages/Profile';
+import Home from './src/pages/home';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PaymentMethod from './src/pages/PaymentMethod';
+import FlashMessage from 'react-native-flash-message';
+
 import Chatpage from './src/pages/Chatpage';
 import History from './src/pages/History';
 import CheckoutScreen from './src/pages/CheckoutScreen';
 import ChartPage from './src/pages/CartPage';
 import ProductPage from './src/pages/ProductPage';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +36,11 @@ const App = () => {
         <Stack.Screen
           name="SignUp"
           component={SignUp}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -70,6 +79,7 @@ const App = () => {
           options={{headerShown: false}}
         />
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 };
