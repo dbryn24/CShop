@@ -41,5 +41,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: 23,
     color: textColor,
+    fontWeight: 'bold',
   }),
 });

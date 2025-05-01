@@ -1,7 +1,12 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
 import React, {useState} from 'react';
-import {Button, Gap, PMButton, BackButton} from '../../components/atoms/';
-import {Header, TextInput} from '../../components/molecules/';
+import {
+  Gap,
+  PMButton,
+  BackButton,
+  COButton,
+} from '../../components/atoms/';
+import {Header, TextInput, SearchInput} from '../../components/molecules/';
 import ProfilePict from '../../assets/pictures/fotoprofile.png';
 import DANA from '../../assets/pictures/david/DANA.png';
 import GOPAY from '../../assets/pictures/david/GOPAY.png';
@@ -9,6 +14,8 @@ import OVO from '../../assets/pictures/david/OVO.png';
 import BNI from '../../assets/pictures/david/BNI.png';
 import BRI from '../../assets/pictures/david/BRI.png';
 import BackIcon from '../../assets/pictures/david/backIcon.png';
+import KaosHitam from '../../assets/pictures/david/KaosDesign.png';
+import HDMI from '../../assets/pictures/david/hdmi.png';
 import TxtButton from '../../components/atoms/TxtButton';
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
@@ -21,48 +28,50 @@ import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 import telephoneIcon from '../../assets/pictures/telephoneIcon.png';
 import emailIcon from '../../assets/pictures/emailIcon.png';
+import TrashIcon from '../../assets/pictures/trash.svg';
+import StickPS from '../../assets/pictures/david/StickPS.png';
+import Spatu from '../../assets/pictures/david/sepatu.png';
 
-const PaymentMethod = () => {
-  const [activeTab, setActiveTab] = useState('Profile');
+const ProductPage = () => {
+  const [activeTab, setActiveTab] = useState('');
+
   return (
     <View style={styles.container}>
-      <BackButton
-        imageSource={BackIcon}
-        width={50} // Atur lebar sesuai kebutuhan
-        height={45} // Atur tinggi sesuai kebutuhan
-      />
-      <View style={styles.ContentContainer}>
-        <View style={styles.userInfo}>
-          <Image source={ProfilePict} style={styles.profileImage} />
-          <View style={styles.PersonalInfo}>
-
-          <Gap height={25} />
-
-            <View style={styles.number}>
-              <Image source={telephoneIcon} style={styles.phoneIcon} />
-              <Text style={styles.emailandnumber}>+62 - 8136 - 8307 - 342</Text>
-            </View>
-            <View style={styles.number}>
-              <Image source={emailIcon} style={styles.phoneIcon} />
-              <Text style={styles.emailandnumber}>Ochibana@gmail.com</Text>
-            </View>
-          </View>
-        </View>
-        <Gap height={50} />
-        <View style={styles.Method}>
-          <Gap height={30} />
-          <PMButton imageSource={DANA} label="DANA" textColor="#FFFFFF" />
-          <Gap height={20} />
-          <PMButton imageSource={GOPAY} label="Gopay" textColor="#FFFFFF" />
-          <Gap height={20} />
-          <PMButton imageSource={OVO} label="OVO" textColor="#FFFFFF" />
-          <Gap height={20} />
-          <PMButton imageSource={BNI} label="Bank BNI" textColor="#FFFFFF" />
-          <Gap height={20} />
-          <PMButton imageSource={BRI} label="Bank BRI" textColor="#FFFFFF" />
+      {/* Header */}
+      <View style={styles.header}>
+        <BackButton
+          imageSource={BackIcon}
+          width={50}
+          height={45}
+        />
+        <View style={{ flex: 1, marginLeft: 10 }}>
+          <SearchInput placeholder="Search" />
         </View>
       </View>
       <Gap height={20} />
+
+      {/* Konten scrollable */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.GambarContainer}>
+          <Image source={KaosHitam} style={styles.gambarKaos} />
+        </View>
+        <Gap height={15} />
+        <View style={styles.containerTulisan}>
+          <Text style={styles.tulisanProduk}>Kaos Hitam Legam</Text>
+          <Text style={styles.tulisanHarga}>Rp. 50.000</Text>
+          <View style={styles.tulisanContainer}></View>
+          <Gap height={35} />
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+        </View>
+        <Gap height={20} />
+        {/* Tambahkan konten lainnya di sini */}
+      </ScrollView>
+
+      {/* Bottom Navbar */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => setActiveTab('Home')}>
@@ -106,48 +115,40 @@ const PaymentMethod = () => {
   );
 };
 
-export default PaymentMethod;
+export default ProductPage;
 
 const styles = StyleSheet.create({
-  emailandnumber: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 18,
-    color: '#ffffff',
-
-    fontWeight: 'bold'
-
-  },
-  PersonalInfo: {
-    gap: 10,
-  },
-  number: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  phoneIcon: {
-    width: 20,
-    height: 20,
-  },
   container: {
     backgroundColor: '#222831',
     flex: 1,
   },
-  userInfo: {
-    backgroundColor: '#50577A',
-    marginTop: 20,
-    width: 360,
-    height: 130,
-    borderRadius: 15,
-    marginHorizontal: 27,
+  header: {
     flexDirection: 'row',
-    gap: 4,
+    alignItems: 'center',
+
   },
-  Method: {
-    backgroundColor: '#50577A',
-    width: 360,
-    height: 500,
-    borderRadius: 15,
-    marginHorizontal: 27,
+  scrollContent: {
+    paddingBottom: 100, // Tambahan agar tidak ketutupan navbar
+  },
+  GambarContainer: {
+    width: '100%',
+    height: 400,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gambarKaos: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  tulisanProduk: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  containerTulisan: {
+    marginLeft: 30,
   },
   bottomNavContainer: {
     height: 70,
@@ -161,16 +162,19 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
-    paddingTop: -15,
+    position: 'absolute',  // <---- Fix: navbar diposisikan absolute
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  profileImage: {
-    marginTop: 5,
-    marginLeft: 10,
-    width: 110,
-    height: 110,
+  tulisanHarga: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });

@@ -10,6 +10,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PaymentMethod from './src/pages/PaymentMethod';
 import FlashMessage from 'react-native-flash-message';
 
+import Chatpage from './src/pages/Chatpage';
+import History from './src/pages/History';
+import CheckoutScreen from './src/pages/CheckoutScreen';
+import ChartPage from './src/pages/CartPage';
+import ProductPage from './src/pages/ProductPage';
+
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -44,6 +51,31 @@ const App = () => {
         <Stack.Screen
           name="PaymentMethod"
           component={PaymentMethod}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CheckoutScreen"
+          component={CheckoutScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Chatpage"
+          component={Chatpage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CartPage"
+          component={ChartPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProductPage"
+          component={ProductPage}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
