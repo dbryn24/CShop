@@ -32,7 +32,7 @@ import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 const ChartPage = ({navigation}) => {
-  const [activeTab, setActiveTab] = useState('Profile');
+  const [activeTab, setActiveTab] = useState('Cart');
   return (
     <View style={styles.container}>
       <Gap height={10} />
