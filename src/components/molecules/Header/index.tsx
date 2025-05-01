@@ -12,6 +12,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const Header = ({title, onBack, leftIcon, color = '#FD7014'}) => {
   return (
     <View style={styles.container}>
+      {/* Optional back button */}
+      {/* {onBack && (
+        <TouchableOpacity onPress={onBack} style={styles.iconContainer}>
+          <Icon name={leftIcon || 'arrow-back'} size={24} color={color} />
+        </TouchableOpacity>
+      )} */}
       <Text style={[styles.title, {color}]}>{title}</Text>
     </View>
   );

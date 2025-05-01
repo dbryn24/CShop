@@ -21,7 +21,12 @@ const SignIn = ({navigation}) => {
         onPress={() => navigation.navigate('ForgotPassword')}
       />
       <Gap height={32} />
-      <Button label="Sign In" color="#FD7014" textColor="#000000" />
+      <Button
+        label="Sign In"
+        color="#FD7014"
+        textColor="#000000"
+        onPress={() => navigation.navigate('Home')}
+      />
       <Gap height={32} />
       <Button
         label="Create New Account"
