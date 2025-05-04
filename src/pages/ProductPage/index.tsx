@@ -32,9 +32,8 @@ import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 
-const ProductPage = () => {
+const ProductPage = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('');
-
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -102,7 +101,7 @@ const ProductPage = () => {
               <HistoryIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Profile')}>
+          <TouchableOpacity onPress={() => {setActiveTab('Profile'); navigation.navigate('Profile');}}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (
