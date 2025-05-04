@@ -1,11 +1,13 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
-import React, {useState} from 'react';
 import {
-  Gap,
-  PMButton,
-  BackButton,
-  COButton,
-} from '../../components/atoms/';
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
+import React, {useState} from 'react';
+import {Gap, PMButton, BackButton, COButton} from '../../components/atoms/';
 import {Header, TextInput, SearchInput} from '../../components/molecules/';
 import ProfilePict from '../../assets/pictures/fotoprofile.png';
 import DANA from '../../assets/pictures/david/DANA.png';
@@ -38,12 +40,8 @@ const ProductPage = ({navigation}) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <BackButton
-          imageSource={BackIcon}
-          width={50}
-          height={45}
-        />
-        <View style={{ flex: 1, marginLeft: 10 }}>
+        <BackButton imageSource={BackIcon} width={50} height={45} />
+        <View style={{flex: 1, marginLeft: 10}}>
           <SearchInput placeholder="Search" />
         </View>
       </View>
@@ -60,11 +58,26 @@ const ProductPage = ({navigation}) => {
           <Text style={styles.tulisanHarga}>Rp. 50.000</Text>
           <View style={styles.tulisanContainer}></View>
           <Gap height={35} />
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
         </View>
         <Gap height={20} />
         {/* Tambahkan konten lainnya di sini */}
@@ -124,7 +137,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-
   },
   scrollContent: {
     paddingBottom: 100, // Tambahan agar tidak ketutupan navbar
@@ -161,7 +173,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
-    position: 'absolute',  // <---- Fix: navbar diposisikan absolute
+    position: 'absolute', // <---- Fix: navbar diposisikan absolute
     bottom: 0,
     left: 0,
     right: 0,

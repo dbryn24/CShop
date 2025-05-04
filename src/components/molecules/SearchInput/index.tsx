@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, TextInput as Input } from 'react-native';
+import {StyleSheet, Text, View, TextInput as Input} from 'react-native';
 import React from 'react';
 import SearchIcon from '../../../assets/pictures/search.svg';
 
-const TextInput = ({ label, placeholder }) => {
+const TextInput = ({label, placeholder}) => {
   return (
     <View style={styles.header}>
       <Text style={styles.label}>{label}</Text>
@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     top: '40%',
-    transform: [{ translateY: -10 }],
+    transform: [{translateY: -10}],
   },
 });

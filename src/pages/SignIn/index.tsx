@@ -39,7 +39,7 @@ const SignIn = ({navigation}) => {
       Alert.alert('Success', 'You are now signed in!');
       navigation.navigate('Home');
     } catch (error) {
-      Alert.alert("Username or Password is incorrect" error.message);
+      Alert.alert("Username or Password is incorrect", error.message);
     }
   };
 

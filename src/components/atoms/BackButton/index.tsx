@@ -1,13 +1,13 @@
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {StyleSheet, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 
-const BackButton = ({ imageSource, width = 40, height = 40 }) => {
+const BackButton = ({imageSource, width = 40, height = 40}) => {
   return (
     <TouchableOpacity style={styles.button} activeOpacity={0.5}>
       {imageSource && (
-        <Image 
-          source={imageSource} 
-          style={[styles.image, { width, height }]} // Mengatur lebar dan tinggi dari props
+        <Image
+          source={imageSource}
+          style={[styles.image, {width, height}]} // Mengatur lebar dan tinggi dari props
           resizeMode="contain" // Mengatur mode tampilan gambar
         />
       )}
@@ -19,7 +19,7 @@ export default BackButton;
 
 const styles = StyleSheet.create({
   button: {
-    marginLeft: 27,
+    marginLeft: 15,
     marginTop: 20,
     margin: 10, // Menambahkan padding untuk area sentuh
   },
