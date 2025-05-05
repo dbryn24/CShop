@@ -90,7 +90,7 @@ const ChartPage = ({navigation}) => {
       <Gap height={111} />
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
-          <TouchableOpacity onPress={() => setActiveTab('Home')}>
+          <TouchableOpacity onPress={() => {setActiveTab('Home'); navigation.navigate('Home');}}>
             {activeTab === 'Home' ? (
               <HomeIconFill width={25} height={25} />
             ) : (

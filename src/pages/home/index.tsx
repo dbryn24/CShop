@@ -23,7 +23,7 @@ import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Home');
 
   return (
@@ -98,7 +98,7 @@ const Home = () => {
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Cart')}>
+          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
@@ -108,7 +108,7 @@ const Home = () => {
           <TouchableOpacity onPress={() => setActiveTab('History')}>
             <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Profile')}>
+          <TouchableOpacity onPress={() => {setActiveTab('Profile'); navigation.navigate('Profile');}}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (
