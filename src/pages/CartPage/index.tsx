@@ -17,8 +17,6 @@ import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 import HDMI from '../../assets/pictures/david/hdmi.png';
 import {useNavigation} from '@react-navigation/native';
-import {doc, deleteDoc} from 'firebase/firestore';
-import {firestore} from '../../config/Firebase';
 
 const ChartPage = () => {
   const [activeTab, setActiveTab] = useState('Cart');
@@ -35,13 +33,8 @@ const ChartPage = () => {
     navigation.navigate('CheckoutScreen', {product});
   };
 
-  const handleDeleteItem = async productId => {
-    try {
-      await deleteDoc(doc(firestore, 'cart', productId));
-      console.log('Item deleted successfully');
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
+  const handleDeleteItem = productId => {
+    console.log(`Item with ID ${productId} deleted`);
   };
 
   return (
