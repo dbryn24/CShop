@@ -1,10 +1,6 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React, {useState, useRef} from 'react';
-import {
-  Gap,
-  BackButton,
-  COButton,
-} from '../../components/atoms/';
+import {Gap, BackButton, COButton} from '../../components/atoms/';
 import SearchInput from '../../components/molecules/SearchInput';
 import BackIcon from '../../assets/pictures/david/backIcon.png';
 import HomeIcon from '../../assets/pictures/home.svg';
@@ -20,10 +16,14 @@ import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 import HDMI from '../../assets/pictures/david/hdmi.png';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc} from 'firebase/firestore';
 
-const ChartPage = ({navigation}) => {
+const ChartPage = () => {
   const [activeTab, setActiveTab] = useState('Cart');
   const searchInputRef = useRef(null);
+  const navigation = useNavigation(); // Inisialisasi navigation
 
   const handleSearchFocus = () => {
     if (searchInputRef.current) {
@@ -31,26 +31,41 @@ const ChartPage = ({navigation}) => {
     }
   };
 
+  const addToFirebase = async product => {
+    try {
+      const docRef = await addDoc(collection(firestore, 'cartItems'), product);
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
+
+  const handleProductPress = async product => {
+    await addToFirebase(product); // Add to Firebase
+    navigation.navigate('CheckoutScreen', {product}); // Navigate to CheckoutScreen
+  };
+
   return (
     <View style={styles.container}>
       <Gap height={10} />
       <View style={styles.header}>
-        <BackButton
-          imageSource={BackIcon}
-          width={50}
-          height={45}
-        />
-        <SearchInput
-          ref={searchInputRef}
-          placeholder="Search"
-        />
+        <BackButton imageSource={BackIcon} width={50} height={45} />
+        <SearchInput ref={searchInputRef} placeholder="Search" />
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.contentInside}>
           <Gap height={10} />
           <Text style={styles.rusdi}>Rusdi</Text>
           <Gap height={10} />
-          <View style={styles.testing}>
+          <TouchableOpacity
+            style={styles.testing}
+            onPress={() =>
+              handleProductPress({
+                name: 'plastation 1 controller',
+                price: 70000,
+                image: StickPS,
+              })
+            }>
             <COButton
               imageSource={StickPS}
               label="plastation 1 controller"
@@ -58,8 +73,16 @@ const ChartPage = ({navigation}) => {
               subText="X1 Rp. 70.000"
             />
             <TrashIcon width={40} height={40} marginLeft={-30} marginTop={40} />
-          </View>
-          <View style={styles.testing}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.testing}
+            onPress={() =>
+              handleProductPress({
+                name: 'sepatu pria',
+                price: 690000,
+                image: Spatu,
+              })
+            }>
             <Gap height={20} />
             <COButton
               imageSource={Spatu}
@@ -68,7 +91,7 @@ const ChartPage = ({navigation}) => {
               subText="X1 Rp. 690.000"
             />
             <TrashIcon width={40} height={40} marginLeft={65} marginTop={40} />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <Gap height={15} />
@@ -77,7 +100,15 @@ const ChartPage = ({navigation}) => {
           <Gap height={10} />
           <Text style={styles.rusdi}>Fuad</Text>
           <Gap height={10} />
-          <View style={styles.testing}>
+          <TouchableOpacity
+            style={styles.testing}
+            onPress={() =>
+              handleProductPress({
+                name: 'Connector HDMI',
+                price: 70000,
+                image: HDMI,
+              })
+            }>
             <COButton
               imageSource={HDMI}
               label="Connector HDMI"
@@ -85,13 +116,17 @@ const ChartPage = ({navigation}) => {
               subText="X1 Rp. 70.000"
             />
             <TrashIcon width={40} height={40} marginLeft={15} marginTop={40} />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <Gap height={109} />
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
-          <TouchableOpacity onPress={() => {setActiveTab('Home'); navigation.navigate('Home');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Home');
+              navigation.navigate('Home');
+            }}>
             {activeTab === 'Home' ? (
               <HomeIconFill width={25} height={25} />
             ) : (
@@ -105,19 +140,23 @@ const ChartPage = ({navigation}) => {
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Cart');
+              navigation.navigate('CartPage');
+            }}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('History')}>
-            {activeTab === 'History' ? (
-              <HistoryIconFill width={25} height={25} />
-            ) : (
-              <HistoryIcon width={25} height={25} />
-            )}
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('History');
+              navigation.navigate('History');
+            }}>
+            <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
