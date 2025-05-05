@@ -1,22 +1,12 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, {useState, useRef} from 'react';
 import {
-  Button,
   Gap,
-  PMButton,
   BackButton,
   COButton,
 } from '../../components/atoms/';
-import {Header, TextInput, SearchInput} from '../../components/molecules/';
-import ProfilePict from '../../assets/pictures/fotoprofile.png';
-import DANA from '../../assets/pictures/david/DANA.png';
-import GOPAY from '../../assets/pictures/david/GOPAY.png';
-import OVO from '../../assets/pictures/david/OVO.png';
-import BNI from '../../assets/pictures/david/BNI.png';
-import BRI from '../../assets/pictures/david/BRI.png';
+import SearchInput from '../../components/molecules/SearchInput'; // Import SearchInput
 import BackIcon from '../../assets/pictures/david/backIcon.png';
-import HDMI from '../../assets/pictures/david/hdmi.png';
-import TxtButton from '../../components/atoms/TxtButton';
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
 import CartIcon from '../../assets/pictures/cart.svg';
@@ -26,24 +16,36 @@ import HomeIconFill from '../../assets/pictures/home_fill.svg';
 import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
-import telephoneIcon from '../../assets/pictures/telephoneIcon.png';
-import emailIcon from '../../assets/pictures/emailIcon.png';
 import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
-const ChartPage = ({navigation}) => {
+import HDMI from '../../assets/pictures/david/hdmi.png';
+
+const CartPage = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Cart');
+  const searchInputRef = useRef(null); // Gunakan useRef untuk mengontrol SearchInput
+
+  const handleSearchFocus = () => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus(); // Fokuskan ke SearchInput
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Gap height={10} />
       <View style={styles.header}>
         <BackButton
           imageSource={BackIcon}
-          width={50} // Atur lebar sesuai kebutuhan
-          height={45} // Atur tinggi sesuai kebutuhan
+          width={50}
+          height={45}
         />
-        <SearchInput placeholder="Search" />
+        <SearchInput
+          ref={searchInputRef} // Hubungkan SearchInput dengan useRef
+          placeholder="Search"
+        />
       </View>
+      {/* Konten Rusdi */}
       <View style={styles.contentContainer}>
         <View style={styles.contentInside}>
           <Gap height={10} />
@@ -52,7 +54,7 @@ const ChartPage = ({navigation}) => {
           <View style={styles.testing}>
             <COButton
               imageSource={StickPS}
-              label="plastation 1 controller"
+              label="PlayStation 1 Controller"
               textColor="#FFFFFF"
               subText="X1 Rp. 70.000"
             />
@@ -62,7 +64,7 @@ const ChartPage = ({navigation}) => {
             <Gap height={20} />
             <COButton
               imageSource={Spatu}
-              label="sepatu pria"
+              label="Sepatu Pria"
               textColor="#FFFFFF"
               subText="X1 Rp. 690.000"
             />
@@ -71,6 +73,7 @@ const ChartPage = ({navigation}) => {
         </View>
       </View>
       <Gap height={15} />
+      {/* Konten Fuad */}
       <View style={styles.contentContainer2}>
         <View style={styles.contentInside}>
           <Gap height={10} />
@@ -88,6 +91,7 @@ const ChartPage = ({navigation}) => {
         </View>
       </View>
       <Gap height={109} />
+      {/* Navigasi Bawah */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => {setActiveTab('Home'); navigation.navigate('Home');}}>
@@ -97,7 +101,7 @@ const ChartPage = ({navigation}) => {
               <HomeIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
+          <TouchableOpacity onPress={handleSearchFocus}>
             {activeTab === 'Search' ? (
               <SearchIconFill width={25} height={25} />
             ) : (
@@ -135,7 +139,7 @@ const ChartPage = ({navigation}) => {
   );
 };
 
-export default ChartPage;
+export default CartPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -144,6 +148,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   contentContainer: {
     backgroundColor: '#50577A',
@@ -154,6 +160,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     flexDirection: 'row',
     gap: 10,
+    padding: 10,
   },
   contentContainer2: {
     backgroundColor: '#50577A',
@@ -164,19 +171,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     flexDirection: 'row',
     gap: 10,
+    padding: 10,
   },
   contentInside: {
     flexDirection: 'column',
+    flex: 1,
   },
   rusdi: {
     fontSize: 20,
     fontFamily: 'Poppins-Medium',
     color: '#FD7014',
     fontWeight: 'bold',
-    marginLeft: 20,
+    marginLeft: 10,
   },
   testing: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   bottomNavContainer: {
     height: 70,
@@ -190,7 +201,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
-    paddingTop: -15,
   },
   navRow: {
     flexDirection: 'row',
