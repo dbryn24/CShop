@@ -20,6 +20,26 @@ import {useNavigation} from '@react-navigation/native';
 
 const ChartPage = () => {
   const [activeTab, setActiveTab] = useState('Cart');
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 'id-stickps',
+      name: 'plastation 1 controller',
+      price: 70000,
+      image: StickPS,
+    },
+    {
+      id: 'id-spatu',
+      name: 'sepatu pria',
+      price: 690000,
+      image: Spatu,
+    },
+    {
+      id: 'id-hdmi',
+      name: 'Connector HDMI',
+      price: 70000,
+      image: HDMI,
+    },
+  ]);
   const searchInputRef = useRef(null);
   const navigation = useNavigation();
 
@@ -34,7 +54,7 @@ const ChartPage = () => {
   };
 
   const handleDeleteItem = productId => {
-    console.log(`Item with ID ${productId} deleted`);
+    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
   };
 
   return (
@@ -51,59 +71,35 @@ const ChartPage = () => {
           <Gap height={10} />
           <Text style={styles.rusdi}>Rusdi</Text>
           <Gap height={10} />
-          <TouchableOpacity
-            style={styles.testing}
-            onPress={() =>
-              handleProductPress({
-                name: 'plastation 1 controller',
-                price: 70000,
-                image: StickPS,
-              })
-            }>
-            <COButton
-              imageSource={StickPS}
-              label="plastation 1 controller"
-              textColor="#FFFFFF"
-              subText="X1 Rp. 70.000"
-            />
+          {cartItems.map(item => (
             <TouchableOpacity
+              key={item.id}
               style={styles.testing}
-              onPress={() => handleDeleteItem('id-stickps')}>
-              <TrashIcon
-                width={40}
-                height={40}
-                marginLeft={-30}
-                marginTop={40}
+              onPress={() =>
+                handleProductPress({
+                  name: item.name,
+                  price: item.price,
+                  image: item.image,
+                })
+              }>
+              <COButton
+                imageSource={item.image}
+                label={item.name}
+                textColor="#FFFFFF"
+                subText={`X1 Rp. ${item.price.toLocaleString('id-ID')}`}
               />
+              <TouchableOpacity
+                style={styles.testing}
+                onPress={() => handleDeleteItem(item.id)}>
+                <TrashIcon
+                  width={40}
+                  height={40}
+                  marginLeft={-30}
+                  marginTop={40}
+                />
+              </TouchableOpacity>
             </TouchableOpacity>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.testing}
-            onPress={() =>
-              handleProductPress({
-                name: 'sepatu pria',
-                price: 690000,
-                image: Spatu,
-              })
-            }>
-            <Gap height={20} />
-            <COButton
-              imageSource={Spatu}
-              label="sepatu pria"
-              textColor="#FFFFFF"
-              subText="X1 Rp. 690.000"
-            />
-            <TouchableOpacity
-              style={styles.testing}
-              onPress={() => handleDeleteItem('id-spatu')}>
-              <TrashIcon
-                width={40}
-                height={40}
-                marginLeft={65}
-                marginTop={40}
-              />
-            </TouchableOpacity>
-          </TouchableOpacity>
+          ))}
         </View>
       </View>
 
@@ -113,32 +109,37 @@ const ChartPage = () => {
           <Gap height={10} />
           <Text style={styles.rusdi}>Fuad</Text>
           <Gap height={10} />
-          <TouchableOpacity
-            style={styles.testing}
-            onPress={() =>
-              handleProductPress({
-                name: 'Connector HDMI',
-                price: 70000,
-                image: HDMI,
-              })
-            }>
-            <COButton
-              imageSource={HDMI}
-              label="Connector HDMI"
-              textColor="#FFFFFF"
-              subText="X1 Rp. 70.000"
-            />
-            <TouchableOpacity
-              style={styles.testing}
-              onPress={() => handleDeleteItem('id-hdmi')}>
-              <TrashIcon
-                width={40}
-                height={40}
-                marginLeft={15}
-                marginTop={40}
-              />
-            </TouchableOpacity>
-          </TouchableOpacity>
+          {cartItems
+            .filter(item => item.id === 'id-hdmi')
+            .map(item => (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.testing}
+                onPress={() =>
+                  handleProductPress({
+                    name: item.name,
+                    price: item.price,
+                    image: item.image,
+                  })
+                }>
+                <COButton
+                  imageSource={item.image}
+                  label={item.name}
+                  textColor="#FFFFFF"
+                  subText={`X1 Rp. ${item.price.toLocaleString('id-ID')}`}
+                />
+                <TouchableOpacity
+                  style={styles.testing}
+                  onPress={() => handleDeleteItem(item.id)}>
+                  <TrashIcon
+                    width={40}
+                    height={40}
+                    marginLeft={15}
+                    marginTop={40}
+                  />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
         </View>
       </View>
 
