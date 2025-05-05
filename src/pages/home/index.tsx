@@ -19,14 +19,43 @@ import HomeIconFill from '../../assets/pictures/home_fill.svg';
 import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc, getDocs, query, where} from 'firebase/firestore';
+
+const addToFirebase = async product => {
+  try {
+    // Query untuk memeriksa apakah produk sudah ada di Firestore
+    const q = query(
+      collection(firestore, 'products'),
+      where('id', '==', product.id),
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      // Jika produk belum ada, tambahkan ke Firestore
+      const docRef = await addDoc(collection(firestore, 'products'), product);
+      console.log('Document written with ID: ', docRef.id);
+    } else {
+      console.log('Product already exists in Firestore.');
+    }
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+};
 
 const Home = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Home');
-  const searchInputRef = useRef(null); // Definisikan useRef di level atas komponen
-
+  const searchInputRef = useRef(null);
+  // Inisialisasi navigation
   const handleSearchPress = () => {
     setActiveTab('Search');
     searchInputRef.current?.focus(); // Fokuskan ke search bar
+  };
+
+  const handleProductPress = async product => {
+    await addToFirebase(product); // Add to Firebase
+    navigation.navigate('ProductPage', {product}); // Navigate to ProductPage
   };
 
   return (
@@ -76,11 +105,15 @@ const Home = ({navigation}) => {
         {/* Product List */}
         <View style={styles.productList}>
           {products.map(product => (
-            <View key={product.id} style={styles.productCard}>
+            <TouchableOpacity
+              key={product.id}
+              style={styles.productCard}
+              onPress={() => handleProductPress(product)}>
+              {/* Bungkus dengan TouchableOpacity */}
               <Image source={product.image} style={styles.productImage} />
               <Text style={styles.productName}>{product.name}</Text>
               <Text style={styles.productPrice}>{product.price}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -113,7 +146,8 @@ const Home = ({navigation}) => {
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity  onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
               setActiveTab('History');
               navigation.navigate('History');
             }}>

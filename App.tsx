@@ -78,6 +78,11 @@ const App = () => {
           component={ProductPage}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="ChatPage"
+          component={Chatpage}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
       <FlashMessage position="top" />
     </NavigationContainer>

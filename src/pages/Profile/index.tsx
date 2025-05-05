@@ -182,7 +182,10 @@ const Profile = ({navigation}) => {
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('History')}>
+          <TouchableOpacity onPress={() => {
+              setActiveTab('History');
+              navigation.navigate('History');
+            }}>
             <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('Profile')}>

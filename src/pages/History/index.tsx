@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc} from 'firebase/firestore';
 
 // Gambar produk
 import StikPS from '../../assets/pictures/stik.png';
@@ -20,9 +22,26 @@ import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 import {useNavigation} from '@react-navigation/native'; // Import useNavigation
 
-const History = ({navigation}) => {
+const addToFirebase = async historyItem => {
+  try {
+    const docRef = await addDoc(
+      collection(firestore, 'historyItems'),
+      historyItem,
+    );
+    console.log('Document written with ID: ', docRef.id);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+};
+
+const handleHistorySave = async historyItem => {
+  await addToFirebase(historyItem); // Add to Firebase
+  console.log('History item saved:', historyItem);
+};
+
+const History = () => {
   const [activeTab, setActiveTab] = useState('History');
-  const nav = useNavigation(); // Inisialisasi navigation
+  const navigation = useNavigation(); // Inisialisasi navigation
 
   return (
     <View style={styles.container}>
@@ -31,7 +50,7 @@ const History = ({navigation}) => {
         <TouchableOpacity
           onPress={() => {
             setActiveTab('Home'); // Set activeTab ke 'Home'
-            nav.goBack(); // Kembali ke halaman sebelumnya
+            navigation.goBack(); // Kembali ke halaman sebelumnya
           }}>
           <BackIcon width={40} height={40} />
         </TouchableOpacity>
@@ -73,31 +92,51 @@ const History = ({navigation}) => {
       {/* Bottom Navigation */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
-          <TouchableOpacity onPress={() => setActiveTab('Home')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Home');
+              navigation.navigate('Home');
+            }}>
             {activeTab === 'Home' ? (
               <HomeIconFill width={25} height={25} />
             ) : (
               <HomeIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Search');
+              navigation.navigate('Search');
+            }}>
             {activeTab === 'Search' ? (
               <SearchIconFill width={25} height={25} />
             ) : (
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Cart')}>
-            {activeTab === 'Cart' ? (
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('CartPage');
+              navigation.navigate('CartPage');
+            }}>
+            {activeTab === 'CartPage' ? (
               <CartIconFill width={25} height={25} />
             ) : (
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('History')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('History');
+              navigation.navigate('History');
+            }}>
             <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Profile')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Profile');
+              navigation.navigate('Profile');
+            }}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (

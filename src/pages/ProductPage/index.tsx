@@ -1,12 +1,12 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, TextInput} from 'react-native';
+import React, {useState, useRef} from 'react';
 import {
   Gap,
   PMButton,
   BackButton,
   COButton,
 } from '../../components/atoms/';
-import {Header, TextInput, SearchInput} from '../../components/molecules/';
+import {Header, SearchInput} from '../../components/molecules/';
 import ProfilePict from '../../assets/pictures/fotoprofile.png';
 import DANA from '../../assets/pictures/david/DANA.png';
 import GOPAY from '../../assets/pictures/david/GOPAY.png';
@@ -31,9 +31,19 @@ import emailIcon from '../../assets/pictures/emailIcon.png';
 import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ProductPage = ({navigation}) => {
-  const [activeTab, setActiveTab] = useState('');
+const ProductPage = () => {
+  const [activeTab, setActiveTab] = useState('Home'); // Inisialisasi activeTab
+  const navigation = useNavigation(); // Inisialisasi navigation
+  const searchInputRef = useRef(null); // Inisialisasi ref
+
+  const handleSearchPress = () => {
+    setActiveTab('Search');
+    searchInputRef.current?.focus(); // Fokuskan ke search bar
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -43,8 +53,21 @@ const ProductPage = ({navigation}) => {
           width={50}
           height={45}
         />
-        <View style={{ flex: 1, marginLeft: 10 }}>
-          <SearchInput placeholder="Search" />
+        <View style={styles.searchContainer}>
+          <TextInput
+            ref={searchInputRef} // Hubungkan ref ke TextInput
+            style={styles.searchInput}
+            placeholder="Search"
+            placeholderTextColor="#A5A5A5"
+          />
+          <TouchableOpacity onPress={handleSearchPress}>
+            <Icon
+              name="magnify"
+              size={24}
+              color="#A5A5A5"
+              style={styles.searchIcon}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <Gap height={20} />
@@ -60,11 +83,26 @@ const ProductPage = ({navigation}) => {
           <Text style={styles.tulisanHarga}>Rp. 50.000</Text>
           <View style={styles.tulisanContainer}></View>
           <Gap height={35} />
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
-          <Text style={styles.tulisanHarga}>Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di wanita</Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
+          <Text style={styles.tulisanHarga}>
+            Kaos Hitam lengan pendek dengan ukuran XL, bisa di pria dan di
+            wanita
+          </Text>
         </View>
         <Gap height={20} />
         {/* Tambahkan konten lainnya di sini */}
@@ -73,35 +111,47 @@ const ProductPage = ({navigation}) => {
       {/* Bottom Navbar */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
-          <TouchableOpacity onPress={() => setActiveTab('Home')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Home');
+              navigation.navigate('Home');
+            }}>
             {activeTab === 'Home' ? (
               <HomeIconFill width={25} height={25} />
             ) : (
               <HomeIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
+          <TouchableOpacity onPress={handleSearchPress}>
             {activeTab === 'Search' ? (
               <SearchIconFill width={25} height={25} />
             ) : (
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Cart')}>
-            {activeTab === 'Cart' ? (
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('CartPage');
+              navigation.navigate('CartPage');
+            }}>
+            {activeTab === 'CartPage' ? (
               <CartIconFill width={25} height={25} />
             ) : (
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('History')}>
-            {activeTab === 'History' ? (
-              <HistoryIconFill width={25} height={25} />
-            ) : (
-              <HistoryIcon width={25} height={25} />
-            )}
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('History');
+              navigation.navigate('History');
+            }}>
+            <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Profile'); navigation.navigate('Profile');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Profile');
+              navigation.navigate('Profile');
+            }}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (
@@ -124,7 +174,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-
   },
   scrollContent: {
     paddingBottom: 100, // Tambahan agar tidak ketutupan navbar
@@ -161,7 +210,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
-    position: 'absolute',  // <---- Fix: navbar diposisikan absolute
+    position: 'absolute', // <---- Fix: navbar diposisikan absolute
     bottom: 0,
     left: 0,
     right: 0,
@@ -175,5 +224,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#D9D9D9',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    flex: 1,
+    marginLeft: 10,
+  },
+  searchInput: {
+    flex: 1,
+    color: 'black',
+    fontSize: 16,
+  },
+  searchIcon: {
+    marginLeft: 8,
   },
 });
