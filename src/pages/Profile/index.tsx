@@ -1,10 +1,18 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {Gap} from '../../components/atoms/';
 import Fotoprofile from '../../assets/pictures/fotoprofile.png';
 import IconEdit from '../../assets/pictures/Vector.svg';
 import BackIcon from '../../assets/pictures/backIcon.svg';
-import CameraIcon from '../../assets/pictures/camera.svg'; // Kamera ditambahkan
+import CameraIcon from '../../assets/pictures/camera.svg';
 
 // Icon navigasi bawah
 import HomeIcon from '../../assets/pictures/home.svg';
@@ -21,6 +29,33 @@ import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
 const Profile = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Profile');
+  const [photo, setPhoto] = useState(null);
+
+  const handleChoosePhoto = () => {
+    Alert.alert('Pilih Gambar', 'Ambil gambar dari?', [
+      {
+        text: 'Kamera',
+        onPress: () => {
+          launchCamera({mediaType: 'photo'}, res => {
+            if (!res.didCancel && !res.errorCode) {
+              setPhoto({uri: res.assets[0].uri});
+            }
+          });
+        },
+      },
+      {
+        text: 'Galeri',
+        onPress: () => {
+          launchImageLibrary({mediaType: 'photo'}, res => {
+            if (!res.didCancel && !res.errorCode) {
+              setPhoto({uri: res.assets[0].uri});
+            }
+          });
+        },
+      },
+      {text: 'Batal', style: 'cancel'},
+    ]);
+  };
 
   return (
     <View style={styles.container}>
@@ -33,8 +68,13 @@ const Profile = ({navigation}) => {
       <View style={styles.contentContainer}>
         {/* Foto dan tombol kamera */}
         <View style={styles.profileSection}>
-          <Image source={Fotoprofile} style={styles.profileImage} />
-          <TouchableOpacity style={styles.cameraButton}>
+          <Image
+            source={photo ? photo : Fotoprofile}
+            style={styles.profileImage}
+          />
+          <TouchableOpacity
+            style={styles.cameraButton}
+            onPress={handleChoosePhoto}>
             <CameraIcon width={24} height={24} />
           </TouchableOpacity>
         </View>
@@ -87,7 +127,11 @@ const Profile = ({navigation}) => {
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Cart');
+              navigation.navigate('CartPage');
+            }}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
