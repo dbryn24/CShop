@@ -15,15 +15,16 @@ import Fotoprofile from '../../assets/pictures/fotoprofile.png';
 import IconEdit from '../../assets/pictures/Vector.svg';
 import BackIcon from '../../assets/pictures/backIcon.svg';
 import CameraIcon from '../../assets/pictures/camera.svg';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation
 
-// Icon navigasi bawah
+// Ikon navigasi bawah
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
 import CartIcon from '../../assets/pictures/cart.svg';
 import HistoryIcon from '../../assets/pictures/history.svg';
 import ProfileIcon from '../../assets/pictures/profile.svg';
 
-// Icon aktif (fill)
+// Ikon aktif (fill)
 import HomeIconFill from '../../assets/pictures/home_fill.svg';
 import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
@@ -34,6 +35,7 @@ const Profile = ({navigation}) => {
   const [photoUrl, setPhotoUrl] = useState(null); // URL foto default
   const [username, setUsername] = useState('Unknown');
   const [email, setEmail] = useState('No Email');
+  const nav = useNavigation(); // Inisialisasi navigation
 
   // Ambil data pengguna dari Firebase Authentication dan Firestore
   useEffect(() => {
@@ -93,7 +95,12 @@ const Profile = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Tombol kembali */}
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          setActiveTab('Home'); // Set activeTab ke 'Home'
+          nav.goBack(); // Kembali ke halaman sebelumnya
+        }}>
         <BackIcon width={30} height={30} />
       </TouchableOpacity>
 

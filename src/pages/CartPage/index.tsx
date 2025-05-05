@@ -1,11 +1,11 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React, {useState, useRef} from 'react';
 import {
   Gap,
   BackButton,
   COButton,
 } from '../../components/atoms/';
-import SearchInput from '../../components/molecules/SearchInput'; // Import SearchInput
+import SearchInput from '../../components/molecules/SearchInput';
 import BackIcon from '../../assets/pictures/david/backIcon.png';
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
@@ -21,13 +21,13 @@ import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 import HDMI from '../../assets/pictures/david/hdmi.png';
 
-const CartPage = ({navigation}) => {
+const ChartPage = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Cart');
-  const searchInputRef = useRef(null); // Gunakan useRef untuk mengontrol SearchInput
+  const searchInputRef = useRef(null);
 
   const handleSearchFocus = () => {
     if (searchInputRef.current) {
-      searchInputRef.current.focus(); // Fokuskan ke SearchInput
+      searchInputRef.current.focus();
     }
   };
 
@@ -41,11 +41,10 @@ const CartPage = ({navigation}) => {
           height={45}
         />
         <SearchInput
-          ref={searchInputRef} // Hubungkan SearchInput dengan useRef
+          ref={searchInputRef}
           placeholder="Search"
         />
       </View>
-      {/* Konten Rusdi */}
       <View style={styles.contentContainer}>
         <View style={styles.contentInside}>
           <Gap height={10} />
@@ -54,7 +53,7 @@ const CartPage = ({navigation}) => {
           <View style={styles.testing}>
             <COButton
               imageSource={StickPS}
-              label="PlayStation 1 Controller"
+              label="plastation 1 controller"
               textColor="#FFFFFF"
               subText="X1 Rp. 70.000"
             />
@@ -64,7 +63,7 @@ const CartPage = ({navigation}) => {
             <Gap height={20} />
             <COButton
               imageSource={Spatu}
-              label="Sepatu Pria"
+              label="sepatu pria"
               textColor="#FFFFFF"
               subText="X1 Rp. 690.000"
             />
@@ -73,7 +72,6 @@ const CartPage = ({navigation}) => {
         </View>
       </View>
       <Gap height={15} />
-      {/* Konten Fuad */}
       <View style={styles.contentContainer2}>
         <View style={styles.contentInside}>
           <Gap height={10} />
@@ -91,7 +89,6 @@ const CartPage = ({navigation}) => {
         </View>
       </View>
       <Gap height={109} />
-      {/* Navigasi Bawah */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => {setActiveTab('Home'); navigation.navigate('Home');}}>
@@ -139,7 +136,7 @@ const CartPage = ({navigation}) => {
   );
 };
 
-export default CartPage;
+export default ChartPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -148,8 +145,6 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
   },
   contentContainer: {
     backgroundColor: '#50577A',
@@ -160,7 +155,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     flexDirection: 'row',
     gap: 10,
-    padding: 10,
   },
   contentContainer2: {
     backgroundColor: '#50577A',
@@ -171,23 +165,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     flexDirection: 'row',
     gap: 10,
-    padding: 10,
   },
   contentInside: {
     flexDirection: 'column',
-    flex: 1,
   },
   rusdi: {
     fontSize: 20,
     fontFamily: 'Poppins-Medium',
     color: '#FD7014',
     fontWeight: 'bold',
-    marginLeft: 10,
+    marginLeft: 20,
   },
   testing: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   bottomNavContainer: {
     height: 70,
@@ -201,6 +191,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: 'center',
     paddingHorizontal: 30,
+    paddingTop: -15,
   },
   navRow: {
     flexDirection: 'row',
