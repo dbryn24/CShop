@@ -53,8 +53,7 @@ const Home = ({navigation}) => {
     searchInputRef.current?.focus(); // Fokuskan ke search bar
   };
 
-  const handleProductPress = async product => {
-    await addToFirebase(product); // Add to Firebase
+  const handleProductPress = product => {
     navigation.navigate('ProductPage', {product}); // Navigate to ProductPage
   };
 

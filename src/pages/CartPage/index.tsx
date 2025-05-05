@@ -16,14 +16,14 @@ import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 import HDMI from '../../assets/pictures/david/hdmi.png';
-import {useNavigation} from '@react-navigation/native'; // Import useNavigation
+import {useNavigation} from '@react-navigation/native';
+import {doc, deleteDoc} from 'firebase/firestore';
 import {firestore} from '../../config/Firebase';
-import {collection, addDoc} from 'firebase/firestore';
 
 const ChartPage = () => {
   const [activeTab, setActiveTab] = useState('Cart');
   const searchInputRef = useRef(null);
-  const navigation = useNavigation(); // Inisialisasi navigation
+  const navigation = useNavigation();
 
   const handleSearchFocus = () => {
     if (searchInputRef.current) {
@@ -31,18 +31,17 @@ const ChartPage = () => {
     }
   };
 
-  const addToFirebase = async product => {
-    try {
-      const docRef = await addDoc(collection(firestore, 'cartItems'), product);
-      console.log('Document written with ID: ', docRef.id);
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
+  const handleProductPress = product => {
+    navigation.navigate('CheckoutScreen', {product});
   };
 
-  const handleProductPress = async product => {
-    await addToFirebase(product); // Add to Firebase
-    navigation.navigate('CheckoutScreen', {product}); // Navigate to CheckoutScreen
+  const handleDeleteItem = async productId => {
+    try {
+      await deleteDoc(doc(firestore, 'cart', productId));
+      console.log('Item deleted successfully');
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
   return (
@@ -72,7 +71,16 @@ const ChartPage = () => {
               textColor="#FFFFFF"
               subText="X1 Rp. 70.000"
             />
-            <TrashIcon width={40} height={40} marginLeft={-30} marginTop={40} />
+            <TouchableOpacity
+              style={styles.testing}
+              onPress={() => handleDeleteItem('id-stickps')}>
+              <TrashIcon
+                width={40}
+                height={40}
+                marginLeft={-30}
+                marginTop={40}
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.testing}
@@ -90,7 +98,16 @@ const ChartPage = () => {
               textColor="#FFFFFF"
               subText="X1 Rp. 690.000"
             />
-            <TrashIcon width={40} height={40} marginLeft={65} marginTop={40} />
+            <TouchableOpacity
+              style={styles.testing}
+              onPress={() => handleDeleteItem('id-spatu')}>
+              <TrashIcon
+                width={40}
+                height={40}
+                marginLeft={65}
+                marginTop={40}
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
       </View>
@@ -115,7 +132,16 @@ const ChartPage = () => {
               textColor="#FFFFFF"
               subText="X1 Rp. 70.000"
             />
-            <TrashIcon width={40} height={40} marginLeft={15} marginTop={40} />
+            <TouchableOpacity
+              style={styles.testing}
+              onPress={() => handleDeleteItem('id-hdmi')}>
+              <TrashIcon
+                width={40}
+                height={40}
+                marginLeft={15}
+                marginTop={40}
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
       </View>
