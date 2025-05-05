@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Button, Gap, COButton, BackButton} from '../../components/atoms';
 import StickPS from '../../assets/pictures/david/StickPS.png';
@@ -69,36 +76,38 @@ const CheckoutScreen = () => {
         width={50} // Atur lebar sesuai kebutuhan
         height={45} // Atur tinggi sesuai kebutuhan
       />
-      <View style={styles.contentContainer}>
-        <View style={styles.contentInside}>
-          <Gap height={10} />
-          <Text style={styles.rusdi}>Rusdi</Text>
-          <Gap height={10} />
-          {product ? (
-            <View style={styles.testing}>
-              <COButton
-                imageSource={product.image}
-                label={product.name}
-                textColor="#FFFFFF"
-                subText={`X1 Rp. ${product.price}`}
-              />
-              <TrashIcon
-                width={40}
-                height={40}
-                marginLeft={-30}
-                marginTop={40}
-              />
-            </View>
-          ) : (
-            <Text style={{color: '#fff'}}>Tidak ada produk yang dipilih</Text>
-          )}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.contentContainer}>
+          <View style={styles.contentInside}>
+            <Gap height={10} />
+            <Text style={styles.rusdi}>Rusdi</Text>
+            <Gap height={10} />
+            {product ? (
+              <View style={styles.testing}>
+                <COButton
+                  imageSource={product.image}
+                  label={product.name}
+                  textColor="#FFFFFF"
+                  subText={`X1 Rp. ${product.price}`}
+                />
+                <TrashIcon
+                  width={40}
+                  height={40}
+                  marginLeft={-30}
+                  marginTop={40}
+                />
+              </View>
+            ) : (
+              <Text style={{color: '#fff'}}>Tidak ada produk yang dipilih</Text>
+            )}
+          </View>
         </View>
-      </View>
-      <TouchableOpacity
-        style={styles.chatButton}
-        onPress={() => navigation.navigate('ChatPage')}>
-        <Text style={styles.chatButtonText}>Chat penjual</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.chatButton}
+          onPress={() => navigation.navigate('ChatPage')}>
+          <Text style={styles.chatButtonText}>Chat penjual</Text>
+        </TouchableOpacity>
+      </ScrollView>
       <View style={styles.totalHarga}>
         <Text style={styles.totalText}>Total</Text>
         <Text style={styles.priceText}>Rp. {totalHarga}</Text>
@@ -122,6 +131,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#222831',
     flex: 1,
+  },
+  scrollContainer: {
+    paddingBottom: 100, // Beri ruang untuk elemen fixed
   },
   contentContainer: {
     backgroundColor: '#50577A',
@@ -166,8 +178,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
   },
   totalHarga: {
-    marginTop: 285,
-    marginLeft: 15,
+    position: 'absolute',
+    bottom: 90, // Menempatkan total di bagian bawah
+    left: 15,
+    right: 15,
   },
   chatButton: {
     backgroundColor: '#FD7014',
