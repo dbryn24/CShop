@@ -33,13 +33,16 @@ const SignIn = ({navigation}) => {
       const userDoc = querySnapshot.docs[0];
       const userData = userDoc.data();
 
+      console.log('User Data:', userData); // Debugging log
+
       // Login menggunakan email dan password
       await signInWithEmailAndPassword(auth, userData.email, password);
 
       Alert.alert('Success', 'You are now signed in!');
       navigation.navigate('Home');
     } catch (error) {
-      Alert.alert('Username or Password is incorrect', error.message);
+      console.error('Sign-in error:', error); // Debugging log
+      Alert.alert('Error', 'Username or Password is incorrect');
     }
   };
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {Button, Gap} from '../../components/atoms';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// Import SVG icons for bottom navigation
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
 import CartIcon from '../../assets/pictures/cart.svg';
@@ -25,12 +22,19 @@ import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
 const Home = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Home');
+  const searchInputRef = useRef(null); // Definisikan useRef di level atas komponen
+
+  const handleSearchPress = () => {
+    setActiveTab('Search');
+    searchInputRef.current?.focus(); // Fokuskan ke search bar
+  };
 
   return (
     <View style={styles.container}>
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
+          ref={searchInputRef} // Hubungkan ref ke TextInput
           style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor="#A5A5A5"
@@ -91,24 +95,35 @@ const Home = ({navigation}) => {
               <HomeIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
+          <TouchableOpacity onPress={handleSearchPress}>
             {activeTab === 'Search' ? (
               <SearchIconFill width={25} height={25} />
             ) : (
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Cart');
+              navigation.navigate('CartPage');
+            }}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('History')}>
+          <TouchableOpacity  onPress={() => {
+              setActiveTab('History');
+              navigation.navigate('History');
+            }}>
             <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Profile'); navigation.navigate('Profile');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Profile');
+              navigation.navigate('Profile');
+            }}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (
@@ -139,7 +154,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    color: '#FFFFFF',
+    color: 'black',
     fontSize: 16,
   },
   searchIcon: {

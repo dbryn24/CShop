@@ -1,22 +1,12 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
-  Button,
   Gap,
-  PMButton,
   BackButton,
   COButton,
 } from '../../components/atoms/';
-import {Header, TextInput, SearchInput} from '../../components/molecules/';
-import ProfilePict from '../../assets/pictures/fotoprofile.png';
-import DANA from '../../assets/pictures/david/DANA.png';
-import GOPAY from '../../assets/pictures/david/GOPAY.png';
-import OVO from '../../assets/pictures/david/OVO.png';
-import BNI from '../../assets/pictures/david/BNI.png';
-import BRI from '../../assets/pictures/david/BRI.png';
+import SearchInput from '../../components/molecules/SearchInput';
 import BackIcon from '../../assets/pictures/david/backIcon.png';
-import HDMI from '../../assets/pictures/david/hdmi.png';
-import TxtButton from '../../components/atoms/TxtButton';
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
 import CartIcon from '../../assets/pictures/cart.svg';
@@ -26,23 +16,34 @@ import HomeIconFill from '../../assets/pictures/home_fill.svg';
 import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
-import telephoneIcon from '../../assets/pictures/telephoneIcon.png';
-import emailIcon from '../../assets/pictures/emailIcon.png';
 import TrashIcon from '../../assets/pictures/trash.svg';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
+import HDMI from '../../assets/pictures/david/hdmi.png';
+
 const ChartPage = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Cart');
+  const searchInputRef = useRef(null);
+
+  const handleSearchFocus = () => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Gap height={10} />
       <View style={styles.header}>
         <BackButton
           imageSource={BackIcon}
-          width={50} // Atur lebar sesuai kebutuhan
-          height={45} // Atur tinggi sesuai kebutuhan
+          width={50}
+          height={45}
         />
-        <SearchInput placeholder="Search" />
+        <SearchInput
+          ref={searchInputRef}
+          placeholder="Search"
+        />
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.contentInside}>
@@ -87,7 +88,7 @@ const ChartPage = ({navigation}) => {
           </View>
         </View>
       </View>
-      <Gap height={111} />
+      <Gap height={109} />
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
           <TouchableOpacity onPress={() => {setActiveTab('Home'); navigation.navigate('Home');}}>
@@ -97,7 +98,7 @@ const ChartPage = ({navigation}) => {
               <HomeIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
+          <TouchableOpacity onPress={handleSearchFocus}>
             {activeTab === 'Search' ? (
               <SearchIconFill width={25} height={25} />
             ) : (

@@ -1,47 +1,61 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Image, Alert } from "react-native";
-import Gap from "../../components/atoms/Gap";
-import Button from "../../components/atoms/Button";
-import Header from "../../components/molecules/Header";
-import TextInput from "../../components/molecules/TextInput";
-import Logo from "../../assets/pictures/logo.png";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, firestore } from "../../config/Firebase";
+import React, {useState} from 'react';
+import {StyleSheet, View, Image, Alert} from 'react-native';
+import {Button, Gap} from '../../components/atoms/';
+import {Header, TextInput} from '../../components/molecules/';
+import Logo from '../../assets/pictures/logo.png';
+import TxtButton from '../../components/atoms/TxtButton';
+import {auth, firestore} from '../../config/Firebase';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {collection, query, where, getDocs} from 'firebase/firestore';
 
-const SignUp = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+const SignIn = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSignUp = async () => {
-    if (!email || !password || !username) {
-      Alert.alert("Error", "All fields are required");
+  const handleSignIn = async () => {
+    if (!username || !password) {
+      Alert.alert('Error', 'Please fill in both username and password');
       return;
     }
 
     try {
-      // Buat akun pengguna dengan Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const userId = userCredential.user.uid;
+      // Cari pengguna berdasarkan username di Firestore
+      const usersRef = collection(firestore, 'users');
+      const q = query(usersRef, where('username', '==', username));
+      const querySnapshot = await getDocs(q);
 
-      // Simpan data pengguna ke Firestore (termasuk password untuk pengujian)
-      await setDoc(doc(firestore, "users", userId), {
-        username,
-        email,
-        password, // Simpan password (hanya untuk pengujian)
-      });
+      if (querySnapshot.empty) {
+        console.log('No user found with username:', username); // Debugging log
+        Alert.alert('Error', 'Username not found');
+        return;
+      }
 
-      Alert.alert("Success", "User registered successfully!");
-      navigation.navigate("SignIn");
+      // Ambil email dari dokumen pengguna
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+
+      console.log('User Data:', userData); // Debugging log
+
+      // Login menggunakan email dan password
+      await signInWithEmailAndPassword(auth, userData.email, password);
+
+      Alert.alert('Success', 'You are now signed in!');
+      navigation.navigate('Home');
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.error('Sign-in error:', error); // Debugging log
+      if (error.code === 'auth/wrong-password') {
+        Alert.alert('Error', 'Incorrect password');
+      } else if (error.code === 'auth/user-not-found') {
+        Alert.alert('Error', 'User not found');
+      } else {
+        Alert.alert('Error', 'An unexpected error occurred');
+      }
     }
   };
 
   return (
     <View style={styles.contentContainer}>
-      <Header title="Sign Up" />
+      <Header title="Sign In" />
       <View style={styles.logoContainer}>
         <Image source={Logo} style={styles.logo} />
       </View>
@@ -53,51 +67,48 @@ const SignUp = ({ navigation }) => {
       />
       <Gap height={28} />
       <TextInput
-        label="Email"
-        placeholder="Type your email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <Gap height={28} />
-      <TextInput
         label="Password"
         placeholder="Type your password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Gap height={32} />
-      <Button
-        label="Register"
-        color="#FD7014"
-        textColor="#000000"
-        onPress={handleSignUp}
+      <Gap height={28} />
+      <TxtButton
+        label="Forgot password?"
+        onPress={() => navigation.navigate('ForgotPassword')}
       />
       <Gap height={32} />
       <Button
-        label="Login"
+        label="Sign In"
+        color="#FD7014"
+        textColor="#000000"
+        onPress={handleSignIn}
+      />
+      <Gap height={32} />
+      <Button
+        label="Create New Account"
         color="#50577A"
         textColor="#FFFFFF"
-        onPress={() => navigation.navigate("SignIn")}
+        onPress={() => navigation.navigate('SignUp')}
       />
     </View>
   );
 };
 
-export default SignUp;
+export default SignIn;
 
 const styles = StyleSheet.create({
   logoContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   logo: {
     width: 300,
     height: 300,
   },
   contentContainer: {
-    backgroundColor: "#222831",
+    backgroundColor: '#222831',
     flex: 1,
     paddingHorizontal: 24,
-    justifyContent: "center",
   },
 });

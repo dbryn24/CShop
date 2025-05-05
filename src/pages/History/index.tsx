@@ -18,15 +18,21 @@ import HomeIconFill from '../../assets/pictures/home_fill.svg';
 import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation
 
 const History = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('History');
+  const nav = useNavigation(); // Inisialisasi navigation
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setActiveTab('Home'); // Set activeTab ke 'Home'
+            nav.goBack(); // Kembali ke halaman sebelumnya
+          }}>
           <BackIcon width={40} height={40} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>History</Text>
