@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {Gap} from '../../components/atoms/';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import Gap from '../../components/atoms/Gap';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {auth, firestore} from '../../config/Firebase'; // Ambil auth dan firestore dari konfigurasi Firebase
+import {doc, getDoc} from 'firebase/firestore';
 import Fotoprofile from '../../assets/pictures/fotoprofile.png';
 import IconEdit from '../../assets/pictures/Vector.svg';
 import BackIcon from '../../assets/pictures/backIcon.svg';
-import CameraIcon from '../../assets/pictures/camera.svg'; // Kamera ditambahkan
+import CameraIcon from '../../assets/pictures/camera.svg';
 
 // Icon navigasi bawah
 import HomeIcon from '../../assets/pictures/home.svg';
@@ -21,6 +31,64 @@ import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 
 const Profile = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Profile');
+  const [photoUrl, setPhotoUrl] = useState(null); // URL foto default
+  const [username, setUsername] = useState('Unknown');
+  const [email, setEmail] = useState('No Email');
+
+  // Ambil data pengguna dari Firebase Authentication dan Firestore
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = auth.currentUser; // Ambil pengguna yang sedang login
+        if (user) {
+          setEmail(user.email || 'No Email'); // Ambil email dari Firebase Authentication
+
+          // Ambil username dari Firestore
+          const userDocRef = doc(firestore, 'users', user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUsername(userData.username || 'Unknown'); // Ambil username dari Firestore
+          } else {
+            console.log('No such document!');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        Alert.alert('Error', 'Failed to fetch user data');
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Fungsi untuk memilih foto
+  const handleChoosePhoto = () => {
+    Alert.alert('Pilih Gambar', 'Ambil gambar dari?', [
+      {
+        text: 'Kamera',
+        onPress: () => {
+          launchCamera({mediaType: 'photo'}, res => {
+            if (!res.didCancel && !res.errorCode) {
+              setPhotoUrl(res.assets[0].uri); // Simpan URL foto lokal
+            }
+          });
+        },
+      },
+      {
+        text: 'Galeri',
+        onPress: () => {
+          launchImageLibrary({mediaType: 'photo'}, res => {
+            if (!res.didCancel && !res.errorCode) {
+              setPhotoUrl(res.assets[0].uri); // Simpan URL foto lokal
+            }
+          });
+        },
+      },
+      {text: 'Batal', style: 'cancel'},
+    ]);
+  };
 
   return (
     <View style={styles.container}>
@@ -33,8 +101,13 @@ const Profile = ({navigation}) => {
       <View style={styles.contentContainer}>
         {/* Foto dan tombol kamera */}
         <View style={styles.profileSection}>
-          <Image source={Fotoprofile} style={styles.profileImage} />
-          <TouchableOpacity style={styles.cameraButton}>
+          <Image
+            source={photoUrl ? {uri: photoUrl} : Fotoprofile} // Tampilkan foto lokal atau default
+            style={styles.profileImage}
+          />
+          <TouchableOpacity
+            style={styles.cameraButton}
+            onPress={handleChoosePhoto}>
             <CameraIcon width={24} height={24} />
           </TouchableOpacity>
         </View>
@@ -43,7 +116,7 @@ const Profile = ({navigation}) => {
         <View style={styles.infoSection}>
           <Text style={styles.label}>Username</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>AmeLike04</Text>
+            <Text style={styles.infoTextLarge}>{username}</Text>
             <IconEdit width={20} height={20} style={{marginLeft: 10}} />
           </View>
 
@@ -51,7 +124,7 @@ const Profile = ({navigation}) => {
 
           <Text style={styles.label}>Email</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>Ochibana@gmail.com</Text>
+            <Text style={styles.infoTextLarge}>{email}</Text>
             <IconEdit width={20} height={20} style={{marginLeft: 10}} />
           </View>
 
@@ -73,7 +146,11 @@ const Profile = ({navigation}) => {
       {/* Bottom navigation */}
       <View style={styles.bottomNavContainer}>
         <View style={styles.navRow}>
-          <TouchableOpacity onPress={() => {setActiveTab('Home'); navigation.navigate('Home');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Home');
+              navigation.navigate('Home');
+            }}>
             {activeTab === 'Home' ? (
               <HomeIconFill width={25} height={25} />
             ) : (
@@ -87,7 +164,11 @@ const Profile = ({navigation}) => {
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setActiveTab('Cart'); navigation.navigate('CartPage');}}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Cart');
+              navigation.navigate('CartPage');
+            }}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
@@ -133,7 +214,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 180,
     height: 180,
-    borderRadius: 70,
+    borderRadius: 90,
   },
   cameraButton: {
     position: 'absolute',
