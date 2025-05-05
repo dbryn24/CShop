@@ -17,29 +17,11 @@ import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
 import HDMI from '../../assets/pictures/david/hdmi.png';
 import {useNavigation} from '@react-navigation/native';
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc} from 'firebase/firestore';
 
 const ChartPage = () => {
   const [activeTab, setActiveTab] = useState('Cart');
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 'id-stickps',
-      name: 'plastation 1 controller',
-      price: 70000,
-      image: StickPS,
-    },
-    {
-      id: 'id-spatu',
-      name: 'sepatu pria',
-      price: 690000,
-      image: Spatu,
-    },
-    {
-      id: 'id-hdmi',
-      name: 'Connector HDMI',
-      price: 70000,
-      image: HDMI,
-    },
-  ]);
   const searchInputRef = useRef(null);
   const navigation = useNavigation();
 
@@ -49,13 +31,87 @@ const ChartPage = () => {
     }
   };
 
-  const handleProductPress = product => {
+  const addToFirebase = async product => {
+    try {
+      const docRef = await addDoc(collection(firestore, 'cartItems'), product);
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
+
+  const handleProductPress = async product => {
+    await addToFirebase(product);
     navigation.navigate('CheckoutScreen', {product});
   };
 
-  const handleDeleteItem = productId => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+  const [rusdiItems, setRusdiItems] = useState([
+    {
+      id: '1',
+      name: 'plastation 1 controller',
+      price: 70000,
+      image: StickPS,
+    },
+    {
+      id: '2',
+      name: 'sepatu pria',
+      price: 690000,
+      image: Spatu,
+    },
+  ]);
+
+  const [fuadItems, setFuadItems] = useState([
+    {
+      id: '3',
+      name: 'Connector HDMI',
+      price: 70000,
+      image: HDMI,
+    },
+  ]);
+
+  const deleteItem = (id, setter) => {
+    setter(prev => prev.filter(item => item.id !== id));
   };
+
+  const renderRusdiItem = ({item}) => (
+    <TouchableOpacity
+      style={styles.testing}
+      onPress={() => handleProductPress(item)}>
+      <COButton
+        imageSource={item.image}
+        label={item.name}
+        textColor="#FFFFFF"
+        subText={`X1 Rp. ${item.price.toLocaleString('id-ID')}`}
+      />
+      <TouchableOpacity onPress={() => deleteItem(item.id, setRusdiItems)}>
+        <TrashIcon
+          width={40}
+          height={40}
+          style={{marginLeft: -30, marginTop: 40}}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+
+  const renderFuadItem = ({item}) => (
+    <TouchableOpacity
+      style={styles.testing}
+      onPress={() => handleProductPress(item)}>
+      <COButton
+        imageSource={item.image}
+        label={item.name}
+        textColor="#FFFFFF"
+        subText={`X1 Rp. ${item.price.toLocaleString('id-ID')}`}
+      />
+      <TouchableOpacity onPress={() => deleteItem(item.id, setFuadItems)}>
+        <TrashIcon
+          width={40}
+          height={40}
+          style={{marginLeft: 15, marginTop: 40}}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -71,35 +127,12 @@ const ChartPage = () => {
           <Gap height={10} />
           <Text style={styles.rusdi}>Rusdi</Text>
           <Gap height={10} />
-          {cartItems.map(item => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.testing}
-              onPress={() =>
-                handleProductPress({
-                  name: item.name,
-                  price: item.price,
-                  image: item.image,
-                })
-              }>
-              <COButton
-                imageSource={item.image}
-                label={item.name}
-                textColor="#FFFFFF"
-                subText={`X1 Rp. ${item.price.toLocaleString('id-ID')}`}
-              />
-              <TouchableOpacity
-                style={styles.testing}
-                onPress={() => handleDeleteItem(item.id)}>
-                <TrashIcon
-                  width={40}
-                  height={40}
-                  marginLeft={-30}
-                  marginTop={40}
-                />
-              </TouchableOpacity>
-            </TouchableOpacity>
-          ))}
+          <FlatList
+            data={rusdiItems}
+            renderItem={renderRusdiItem}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{paddingBottom: 20}}
+          />
         </View>
       </View>
 
@@ -109,37 +142,12 @@ const ChartPage = () => {
           <Gap height={10} />
           <Text style={styles.rusdi}>Fuad</Text>
           <Gap height={10} />
-          {cartItems
-            .filter(item => item.id === 'id-hdmi')
-            .map(item => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.testing}
-                onPress={() =>
-                  handleProductPress({
-                    name: item.name,
-                    price: item.price,
-                    image: item.image,
-                  })
-                }>
-                <COButton
-                  imageSource={item.image}
-                  label={item.name}
-                  textColor="#FFFFFF"
-                  subText={`X1 Rp. ${item.price.toLocaleString('id-ID')}`}
-                />
-                <TouchableOpacity
-                  style={styles.testing}
-                  onPress={() => handleDeleteItem(item.id)}>
-                  <TrashIcon
-                    width={40}
-                    height={40}
-                    marginLeft={15}
-                    marginTop={40}
-                  />
-                </TouchableOpacity>
-              </TouchableOpacity>
-            ))}
+          <FlatList
+            data={fuadItems}
+            renderItem={renderFuadItem}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{paddingBottom: 20}}
+          />
         </View>
       </View>
 
