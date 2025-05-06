@@ -15,6 +15,7 @@ import History from './src/pages/History';
 import CheckoutScreen from './src/pages/CheckoutScreen';
 import ChartPage from './src/pages/CartPage';
 import ProductPage from './src/pages/ProductPage';
+import './src/config/Firebase'; // Pastikan ini diimpor untuk inisialisasi Firebase
 
 
 const Stack = createNativeStackNavigator();

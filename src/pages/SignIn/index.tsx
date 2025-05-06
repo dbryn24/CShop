@@ -83,7 +83,9 @@ const SignIn = ({navigation}) => {
         label="Create New Account"
         color="#50577A"
         textColor="#FFFFFF"
-        onPress={() => navigation.navigate('SignUp')}
+        onPress={() => {navigation.navigate('SignUp');
+          console.log('Navigating to SignUp');
+        }}
       />
     </View>
   );
