@@ -1,12 +1,12 @@
 import {initializeApp, getApps} from 'firebase/app';
-import {getAuth, initializeAuth, getReactNativePersistence} from 'firebase/auth';
+import {getAuth} from 'firebase/auth';
 import {getFirestore} from 'firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Konfigurasi Firebase
 const firebaseConfig = {
   apiKey: 'AIzaSyAz9siEdB_EziF4gBAzItwNhs_gSBrvLHw',
   authDomain: 'finalprojectmad-fe63c.firebaseapp.com',
+  databaseURL: 'https://finalprojectmad-fe63c-default-rtdb.firebaseio.com',
   projectId: 'finalprojectmad-fe63c',
   storageBucket: 'finalprojectmad-fe63c.appspot.com',
   messagingSenderId: '203302136453',
@@ -17,15 +17,8 @@ const firebaseConfig = {
 // Periksa apakah aplikasi sudah diinisialisasi
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Periksa apakah Auth sudah diinisialisasi
-const auth =
-  getAuth(app)._isInitialized
-    ? getAuth(app)
-    : initializeAuth(app, {
-        persistence: getReactNativePersistence(AsyncStorage),
-      });
-
-// Inisialisasi Firestore
+// Inisialisasi Auth dan Firestore
+const auth = getAuth(app);
 const firestore = getFirestore(app);
 
 export {app, auth, firestore};
