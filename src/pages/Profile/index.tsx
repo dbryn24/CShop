@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,61 +9,82 @@ import {
 } from 'react-native';
 import Gap from '../../components/atoms/Gap';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {auth, firestore} from '../../config/Firebase'; // Ambil auth dan firestore dari konfigurasi Firebase
-import {doc, getDoc} from 'firebase/firestore';
+import {auth, firestore} from '../../config/Firebase';
+import {doc, getDoc, updateDoc} from 'firebase/firestore';
+import RNFS from 'react-native-fs'; // Untuk konversi ke Base64
 import Fotoprofile from '../../assets/pictures/fotoprofile.png';
 import IconEdit from '../../assets/pictures/Vector.svg';
 import BackIcon from '../../assets/pictures/backIcon.svg';
 import CameraIcon from '../../assets/pictures/camera.svg';
-import {useNavigation} from '@react-navigation/native'; // Import useNavigation
-
-// Ikon navigasi bawah
-import HomeIcon from '../../assets/pictures/home.svg';
-import SearchIcon from '../../assets/pictures/search.svg';
-import CartIcon from '../../assets/pictures/cart.svg';
-import HistoryIcon from '../../assets/pictures/history.svg';
-import ProfileIcon from '../../assets/pictures/profile.svg';
-
-// Ikon aktif (fill)
-import HomeIconFill from '../../assets/pictures/home_fill.svg';
-import SearchIconFill from '../../assets/pictures/search_fill.svg';
-import CartIconFill from '../../assets/pictures/cart_fill.svg';
-import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
-  const [activeTab, setActiveTab] = useState('Profile');
   const [photoUrl, setPhotoUrl] = useState(null); // URL foto default
   const [username, setUsername] = useState('Unknown');
   const [email, setEmail] = useState('No Email');
-  const nav = useNavigation(); // Inisialisasi navigation
 
-  // Ambil data pengguna dari Firebase Authentication dan Firestore
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = auth.currentUser; // Ambil pengguna yang sedang login
-        if (user) {
-          setEmail(user.email || 'No Email'); // Ambil email dari Firebase Authentication
+  // Fungsi untuk mengambil data pengguna dari Firebase Authentication dan Firestore
+  const fetchUserData = async () => {
+    try {
+      const user = auth.currentUser; // Ambil pengguna yang sedang login
+      if (user) {
+        setEmail(user.email || 'No Email'); // Ambil email dari Firebase Authentication
 
-          // Ambil username dari Firestore
-          const userDocRef = doc(firestore, 'users', user.uid);
-          const userDoc = await getDoc(userDocRef);
+        // Ambil username dan foto dari Firestore
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUsername(userData.username || 'Unknown'); // Ambil username dari Firestore
-          } else {
-            console.log('No such document!');
-          }
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUsername(userData.username || 'Unknown'); // Ambil username dari Firestore
+          setPhotoUrl(userData.photoBase64 ? `data:image/jpeg;base64,${userData.photoBase64}` : null); // Ambil foto dari Firestore
+        } else {
+          console.log('No such document!');
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        Alert.alert('Error', 'Failed to fetch user data');
+      } else {
+        Alert.alert('Error', 'No user is currently logged in');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      Alert.alert('Error', 'Failed to fetch user data');
+    }
+  };
 
-    fetchUserData();
-  }, []);
+  // Panggil fetchUserData setiap kali halaman profil menjadi aktif
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
+
+  // Fungsi untuk mengonversi gambar ke Base64
+  const convertToBase64 = async uri => {
+    try {
+      const base64String = await RNFS.readFile(uri, 'base64');
+      return base64String;
+    } catch (error) {
+      console.error('Error converting to Base64:', error);
+      throw error;
+    }
+  };
+
+  // Fungsi untuk menyimpan foto ke Firestore
+  const savePhotoToFirestore = async base64String => {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        Alert.alert('Error', 'No user is currently logged in');
+        return;
+      }
+
+      const userDocRef = doc(firestore, 'users', user.uid);
+      await updateDoc(userDocRef, {photoBase64: base64String});
+      console.log('Photo saved to Firestore');
+    } catch (error) {
+      console.error('Error saving photo to Firestore:', error);
+      Alert.alert('Error', 'Failed to save photo');
+    }
+  };
 
   // Fungsi untuk memilih foto
   const handleChoosePhoto = () => {
@@ -71,9 +92,18 @@ const Profile = ({navigation}) => {
       {
         text: 'Kamera',
         onPress: () => {
-          launchCamera({mediaType: 'photo'}, res => {
+          launchCamera({mediaType: 'photo'}, async res => {
             if (!res.didCancel && !res.errorCode) {
-              setPhotoUrl(res.assets[0].uri); // Simpan URL foto lokal
+              const uri = res.assets[0].uri;
+
+              try {
+                const base64String = await convertToBase64(uri);
+                await savePhotoToFirestore(base64String);
+                setPhotoUrl(`data:image/jpeg;base64,${base64String}`); // Perbarui foto di UI
+                Alert.alert('Success', 'Photo uploaded successfully!');
+              } catch (error) {
+                Alert.alert('Error', 'Failed to upload photo');
+              }
             }
           });
         },
@@ -81,9 +111,18 @@ const Profile = ({navigation}) => {
       {
         text: 'Galeri',
         onPress: () => {
-          launchImageLibrary({mediaType: 'photo'}, res => {
+          launchImageLibrary({mediaType: 'photo'}, async res => {
             if (!res.didCancel && !res.errorCode) {
-              setPhotoUrl(res.assets[0].uri); // Simpan URL foto lokal
+              const uri = res.assets[0].uri;
+
+              try {
+                const base64String = await convertToBase64(uri);
+                await savePhotoToFirestore(base64String);
+                setPhotoUrl(`data:image/jpeg;base64,${base64String}`); // Perbarui foto di UI
+                Alert.alert('Success', 'Photo uploaded successfully!');
+              } catch (error) {
+                Alert.alert('Error', 'Failed to upload photo');
+              }
             }
           });
         },
@@ -98,8 +137,7 @@ const Profile = ({navigation}) => {
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => {
-          setActiveTab('Home'); // Set activeTab ke 'Home'
-          nav.goBack(); // Kembali ke halaman sebelumnya
+          navigation.goBack(); // Kembali ke halaman sebelumnya
         }}>
         <BackIcon width={30} height={30} />
       </TouchableOpacity>
@@ -146,54 +184,6 @@ const Profile = ({navigation}) => {
           {/* Tombol Simpan */}
           <TouchableOpacity style={styles.saveButton}>
             <Text style={styles.saveButtonText}>Simpan</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Bottom navigation */}
-      <View style={styles.bottomNavContainer}>
-        <View style={styles.navRow}>
-          <TouchableOpacity
-            onPress={() => {
-              setActiveTab('Home');
-              navigation.navigate('Home');
-            }}>
-            {activeTab === 'Home' ? (
-              <HomeIconFill width={25} height={25} />
-            ) : (
-              <HomeIcon width={25} height={25} />
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
-            {activeTab === 'Search' ? (
-              <SearchIconFill width={25} height={25} />
-            ) : (
-              <SearchIcon width={25} height={25} />
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setActiveTab('Cart');
-              navigation.navigate('CartPage');
-            }}>
-            {activeTab === 'Cart' ? (
-              <CartIconFill width={25} height={25} />
-            ) : (
-              <CartIcon width={25} height={25} />
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-              setActiveTab('History');
-              navigation.navigate('History');
-            }}>
-            <HistoryIcon width={25} height={25} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Profile')}>
-            {activeTab === 'Profile' ? (
-              <ProfileIconFill width={25} height={25} />
-            ) : (
-              <ProfileIcon width={25} height={25} />
-            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -269,22 +259,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  bottomNavContainer: {
-    height: 70,
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: -2},
-    shadowRadius: 8,
-    elevation: 5,
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-  },
-  navRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });
