@@ -1,42 +1,24 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Image, Alert } from "react-native";
-import Gap from "../../components/atoms/Gap";
-import Button from "../../components/atoms/Button";
-import Header from "../../components/molecules/Header";
-import TextInput from "../../components/molecules/TextInput";
-import Logo from "../../assets/pictures/logo.png";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, firestore } from "../../config/Firebase";
+import React, {useState} from 'react';
+import {StyleSheet, View, Image, Alert} from 'react-native';
+import {Button, Gap} from '../../components/atoms/';
+import {Header, TextInput} from '../../components/molecules/';
+import Logo from '../../assets/pictures/logo.png';
 
-const SignUp = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+const SignUp = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSignUp = async () => {
-    if (!email || !password || !username) {
-      Alert.alert("Error", "All fields are required");
+  const handleSignUp = () => {
+    if (!username || !email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
-    try {
-      // Buat akun pengguna dengan Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const userId = userCredential.user.uid;
-
-      // Simpan data pengguna ke Firestore (termasuk password untuk pengujian)
-      await setDoc(doc(firestore, "users", userId), {
-        username,
-        email,
-        password, // Simpan password (hanya untuk pengujian)
-      });
-
-      Alert.alert("Success", "User registered successfully!");
-      navigation.navigate("SignIn");
-    } catch (error) {
-      Alert.alert("Error", error.message);
-    }
+    // Logika untuk mendaftarkan pengguna baru
+    console.log('SignUp data:', {username, email, password});
+    Alert.alert('Success', 'Account created successfully!');
+    navigation.navigate('SignIn');
   };
 
   return (
@@ -68,17 +50,17 @@ const SignUp = ({ navigation }) => {
       />
       <Gap height={32} />
       <Button
-        label="Register"
+        label="Sign Up"
         color="#FD7014"
         textColor="#000000"
         onPress={handleSignUp}
       />
       <Gap height={32} />
       <Button
-        label="Login"
+        label="Back to Sign In"
         color="#50577A"
         textColor="#FFFFFF"
-        onPress={() => navigation.navigate("SignIn")}
+        onPress={() => navigation.navigate('SignIn')}
       />
     </View>
   );
@@ -88,16 +70,15 @@ export default SignUp;
 
 const styles = StyleSheet.create({
   logoContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   logo: {
     width: 300,
     height: 300,
   },
   contentContainer: {
-    backgroundColor: "#222831",
+    backgroundColor: '#222831',
     flex: 1,
     paddingHorizontal: 24,
-    justifyContent: "center",
   },
 });

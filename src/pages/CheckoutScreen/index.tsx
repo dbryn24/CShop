@@ -1,5 +1,12 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {Button, Gap, COButton, BackButton} from '../../components/atoms';
 import StickPS from '../../assets/pictures/david/StickPS.png';
 import Spatu from '../../assets/pictures/david/sepatu.png';
@@ -24,47 +31,87 @@ import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 import telephoneIcon from '../../assets/pictures/telephoneIcon.png';
 import emailIcon from '../../assets/pictures/emailIcon.png';
+import {useRoute, useNavigation} from '@react-navigation/native';
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc} from 'firebase/firestore';
+
+const addToFirebase = async product => {
+  try {
+    const docRef = await addDoc(
+      collection(firestore, 'checkoutItems'),
+      product,
+    );
+    console.log('Document written with ID: ', docRef.id);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+};
+
+const handleCheckout = async product => {
+  await addToFirebase(product); // Add to Firebase
+  console.log('Product added to checkout:', product);
+};
 
 const CheckoutScreen = () => {
   const [activeTab, setActiveTab] = useState('Profile');
+  const route = useRoute();
+  const navigation = useNavigation();
+  const {product} = route.params || {}; // Ambil data produk dari route params
+
+  const [totalHarga, setTotalHarga] = useState(0);
+
+  useEffect(() => {
+    // Hitung total harga berdasarkan produk yang diterima
+    if (product) {
+      setTotalHarga(product.price);
+    } else {
+      setTotalHarga(0);
+    }
+  }, [product]);
+
   return (
     <View style={styles.container}>
-
       <BackButton
         imageSource={BackIcon}
         width={50} // Atur lebar sesuai kebutuhan
         height={45} // Atur tinggi sesuai kebutuhan
       />
-      <View style={styles.contentContainer}>
-        <View style={styles.contentInside}>
-          <Gap height={10} />
-          <Text style={styles.rusdi}>Rusdi</Text>
-          <Gap height={10} />
-          <View style={styles.testing}>
-          <COButton
-            imageSource={StickPS}
-            label="plastation 1 controller"
-            textColor="#FFFFFF"
-            subText="X1 Rp. 70.000"
-          />
-          <TrashIcon width={40} height={40} marginLeft={-30} marginTop={40}/>
-          </View>
-          <View style={styles.testing}>
-          <Gap height={20} />
-          <COButton
-            imageSource={Spatu}
-            label="sepatu pria"
-            textColor="#FFFFFF"
-            subText="X1 Rp. 690.000"
-          />
-          <TrashIcon width={40} height={40} marginLeft={65} marginTop={40}/>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.contentContainer}>
+          <View style={styles.contentInside}>
+            <Gap height={10} />
+            <Text style={styles.rusdi}>Rusdi</Text>
+            <Gap height={10} />
+            {product ? (
+              <View style={styles.testing}>
+                <COButton
+                  imageSource={product.image}
+                  label={product.name}
+                  textColor="#FFFFFF"
+                  subText={`X1 Rp. ${product.price}`}
+                />
+                <TrashIcon
+                  width={40}
+                  height={40}
+                  marginLeft={-30}
+                  marginTop={40}
+                />
+              </View>
+            ) : (
+              <Text style={{color: '#fff'}}>Tidak ada produk yang dipilih</Text>
+            )}
           </View>
         </View>
-      </View>
+        <TouchableOpacity
+          style={styles.chatButton}
+          onPress={() => navigation.navigate('ChatPage')}>
+          <Text style={styles.chatButtonText}>Chat penjual</Text>
+        </TouchableOpacity>
+      </ScrollView>
       <View style={styles.totalHarga}>
-          <Text style={styles.totalText}>Total</Text>
-          <Text style={styles.priceText}>Rp. 760.000</Text>
-        </View>
+        <Text style={styles.totalText}>Total</Text>
+        <Text style={styles.priceText}>Rp. {totalHarga}</Text>
+      </View>
       <View style={styles.bottomNavContainer}>
         <Text style={styles.paymentText}>Payment Method</Text>
       </View>
@@ -84,6 +131,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#222831',
     flex: 1,
+  },
+  scrollContainer: {
+    paddingBottom: 100, // Beri ruang untuk elemen fixed
   },
   contentContainer: {
     backgroundColor: '#50577A',
@@ -117,18 +167,33 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   totalText: {
-    color : '#fff',
+    color: '#fff',
     fontSize: 20,
     fontFamily: 'Poppins-Medium',
   },
   priceText: {
-    color : '#fff',
+    color: '#fff',
     fontSize: 30,
     fontWeight: 'bold',
     fontFamily: 'Poppins-Medium',
   },
   totalHarga: {
-    marginTop: 285,
-    marginLeft: 15,
+    position: 'absolute',
+    bottom: 90, // Menempatkan total di bagian bawah
+    left: 15,
+    right: 15,
+  },
+  chatButton: {
+    backgroundColor: '#FD7014',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 25,
+    marginTop: 20,
+  },
+  chatButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'Poppins-Medium',
   },
 });

@@ -8,7 +8,7 @@ const SplashScreen = ({navigation}) => {
 
   useEffect(() => {
     if (isFocused) {
-      const timer = setTimeout(() => navigation.replace('SignUp'), 3000);
+      const timer = setTimeout(() => navigation.replace('SignIn'), 3000);
       return () => clearTimeout(timer); // Bersihkan timer saat komponen unmount
     }
   }, [isFocused]);

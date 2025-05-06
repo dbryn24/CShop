@@ -1,13 +1,14 @@
+import React, {forwardRef} from 'react';
 import {StyleSheet, Text, View, TextInput as Input} from 'react-native';
-import React from 'react';
 import SearchIcon from '../../../assets/pictures/search.svg';
 
-const TextInput = ({label, placeholder}) => {
+const SearchInput = forwardRef(({label, placeholder}, ref) => {
   return (
     <View style={styles.header}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputWrapper}>
         <Input
+          ref={ref} // Hubungkan ref ke TextInput
           placeholder={placeholder}
           placeholderTextColor="#888"
           style={styles.input}
@@ -18,9 +19,9 @@ const TextInput = ({label, placeholder}) => {
       </View>
     </View>
   );
-};
+});
 
-export default TextInput;
+export default SearchInput;
 
 const styles = StyleSheet.create({
   header: {
