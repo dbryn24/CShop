@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  TextInput,
 } from 'react-native';
 import Gap from '../../components/atoms/Gap';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -22,6 +23,12 @@ const Profile = ({navigation}) => {
   const [photoUrl, setPhotoUrl] = useState(null); // URL foto default
   const [username, setUsername] = useState('Unknown');
   const [email, setEmail] = useState('No Email');
+  const [phoneNumber, setPhoneNumber] = useState(''); // Kosong saat halaman dimuat
+  const [isEditing, setIsEditing] = useState({
+    username: false,
+    email: false,
+    phoneNumber: false,
+  });
 
   // Fungsi untuk mengambil data pengguna dari Firebase Authentication dan Firestore
   const fetchUserData = async () => {
@@ -30,13 +37,14 @@ const Profile = ({navigation}) => {
       if (user) {
         setEmail(user.email || 'No Email'); // Ambil email dari Firebase Authentication
 
-        // Ambil username dan foto dari Firestore
+        // Ambil username, foto, dan phone number dari Firestore
         const userDocRef = doc(firestore, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setUsername(userData.username || 'Unknown'); // Ambil username dari Firestore
+          setPhoneNumber(userData.phoneNumber || ''); // Ambil phone number dari Firestore
           setPhotoUrl(userData.photoBase64 ? `data:image/jpeg;base64,${userData.photoBase64}` : null); // Ambil foto dari Firestore
         } else {
           console.log('No such document!');
@@ -98,8 +106,8 @@ const Profile = ({navigation}) => {
 
               try {
                 const base64String = await convertToBase64(uri);
-                await savePhotoToFirestore(base64String);
                 setPhotoUrl(`data:image/jpeg;base64,${base64String}`); // Perbarui foto di UI
+                await savePhotoToFirestore(base64String);
                 Alert.alert('Success', 'Photo uploaded successfully!');
               } catch (error) {
                 Alert.alert('Error', 'Failed to upload photo');
@@ -117,8 +125,8 @@ const Profile = ({navigation}) => {
 
               try {
                 const base64String = await convertToBase64(uri);
-                await savePhotoToFirestore(base64String);
                 setPhotoUrl(`data:image/jpeg;base64,${base64String}`); // Perbarui foto di UI
+                await savePhotoToFirestore(base64String);
                 Alert.alert('Success', 'Photo uploaded successfully!');
               } catch (error) {
                 Alert.alert('Error', 'Failed to upload photo');
@@ -129,6 +137,28 @@ const Profile = ({navigation}) => {
       },
       {text: 'Batal', style: 'cancel'},
     ]);
+  };
+
+  // Fungsi untuk menyimpan perubahan ke Firestore
+  const handleSaveChanges = async () => {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        Alert.alert('Error', 'No user is currently logged in');
+        return;
+      }
+
+      const userDocRef = doc(firestore, 'users', user.uid);
+      await updateDoc(userDocRef, {
+        username,
+        phoneNumber,
+      });
+      Alert.alert('Success', 'Profile updated successfully!');
+      setIsEditing({username: false, email: false, phoneNumber: false});
+    } catch (error) {
+      console.error('Error saving changes:', error);
+      Alert.alert('Error', 'Failed to save changes');
+    }
   };
 
   return (
@@ -161,8 +191,21 @@ const Profile = ({navigation}) => {
         <View style={styles.infoSection}>
           <Text style={styles.label}>Username</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>{username}</Text>
-            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
+            {isEditing.username ? (
+              <TextInput
+                style={styles.infoTextInput}
+                value={username}
+                onChangeText={setUsername}
+              />
+            ) : (
+              <Text style={styles.infoTextLarge}>{username}</Text>
+            )}
+            <TouchableOpacity
+              onPress={() =>
+                setIsEditing(prev => ({...prev, username: !prev.username}))
+              }>
+              <IconEdit width={20} height={20} style={{marginLeft: 10}} />
+            </TouchableOpacity>
           </View>
 
           <Gap height={25} />
@@ -170,19 +213,32 @@ const Profile = ({navigation}) => {
           <Text style={styles.label}>Email</Text>
           <View style={styles.infoRow}>
             <Text style={styles.infoTextLarge}>{email}</Text>
-            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
           </View>
 
           <Gap height={25} />
 
           <Text style={styles.label}>Phone Number</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoTextLarge}>+62 - 8136 - 8307 - 342</Text>
-            <IconEdit width={20} height={20} style={{marginLeft: 10}} />
+            {isEditing.phoneNumber ? (
+              <TextInput
+                style={styles.infoTextInput}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+              />
+            ) : (
+              <Text style={styles.infoTextLarge}>{phoneNumber}</Text>
+            )}
+            <TouchableOpacity
+              onPress={() =>
+                setIsEditing(prev => ({...prev, phoneNumber: !prev.phoneNumber}))
+              }>
+              <IconEdit width={20} height={20} style={{marginLeft: 10}} />
+            </TouchableOpacity>
           </View>
 
           {/* Tombol Simpan */}
-          <TouchableOpacity style={styles.saveButton}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
             <Text style={styles.saveButtonText}>Simpan</Text>
           </TouchableOpacity>
         </View>
@@ -247,6 +303,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'Poppins-Medium',
+  },
+  infoTextInput: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'Poppins-Medium',
+    borderBottomWidth: 1,
+    borderBottomColor: '#FD7014',
+    flex: 1,
   },
   saveButton: {
     backgroundColor: 'orange',
