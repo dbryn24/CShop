@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {Button, Gap} from '../../components/atoms';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// Import SVG icons for bottom navigation
 import HomeIcon from '../../assets/pictures/home.svg';
 import SearchIcon from '../../assets/pictures/search.svg';
 import CartIcon from '../../assets/pictures/cart.svg';
@@ -22,15 +19,50 @@ import HomeIconFill from '../../assets/pictures/home_fill.svg';
 import SearchIconFill from '../../assets/pictures/search_fill.svg';
 import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc, getDocs, query, where} from 'firebase/firestore';
 
-const Home = () => {
+const addToFirebase = async product => {
+  try {
+    // Query untuk memeriksa apakah produk sudah ada di Firestore
+    const q = query(
+      collection(firestore, 'products'),
+      where('id', '==', product.id),
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      // Jika produk belum ada, tambahkan ke Firestore
+      const docRef = await addDoc(collection(firestore, 'products'), product);
+      console.log('Document written with ID: ', docRef.id);
+    } else {
+      console.log('Product already exists in Firestore.');
+    }
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+};
+
+const Home = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Home');
+  const searchInputRef = useRef(null);
+  // Inisialisasi navigation
+  const handleSearchPress = () => {
+    setActiveTab('Search');
+    searchInputRef.current?.focus(); // Fokuskan ke search bar
+  };
+
+  const handleProductPress = product => {
+    navigation.navigate('ProductPage', {product}); // Navigate to ProductPage
+  };
 
   return (
     <View style={styles.container}>
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
+          ref={searchInputRef} // Hubungkan ref ke TextInput
           style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor="#A5A5A5"
@@ -72,11 +104,15 @@ const Home = () => {
         {/* Product List */}
         <View style={styles.productList}>
           {products.map(product => (
-            <View key={product.id} style={styles.productCard}>
+            <TouchableOpacity
+              key={product.id}
+              style={styles.productCard}
+              onPress={() => handleProductPress(product)}>
+              {/* Bungkus dengan TouchableOpacity */}
               <Image source={product.image} style={styles.productImage} />
               <Text style={styles.productName}>{product.name}</Text>
               <Text style={styles.productPrice}>{product.price}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -91,24 +127,36 @@ const Home = () => {
               <HomeIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Search')}>
+          <TouchableOpacity onPress={handleSearchPress}>
             {activeTab === 'Search' ? (
               <SearchIconFill width={25} height={25} />
             ) : (
               <SearchIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Cart')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Cart');
+              navigation.navigate('CartPage');
+            }}>
             {activeTab === 'Cart' ? (
               <CartIconFill width={25} height={25} />
             ) : (
               <CartIcon width={25} height={25} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('History')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('History');
+              navigation.navigate('History');
+            }}>
             <HistoryIcon width={25} height={25} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab('Profile')}>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveTab('Profile');
+              navigation.navigate('Profile');
+            }}>
             {activeTab === 'Profile' ? (
               <ProfileIconFill width={25} height={25} />
             ) : (
@@ -139,7 +187,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    color: '#FFFFFF',
+    color: 'black',
     fontSize: 16,
   },
   searchIcon: {

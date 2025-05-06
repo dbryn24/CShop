@@ -10,7 +10,7 @@ import {
 import BackIcon from '../../assets/pictures/backIcon.svg';
 import ProfileIcon from '../../assets/pictures/accountt';
 
-const ChatScreen = () => {
+const ChatScreen = ({navigation}) => {
   const [messages, setMessages] = useState([]); // Kosongkan awal chat
   const [input, setInput] = useState('');
 
@@ -25,7 +25,7 @@ const ChatScreen = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <BackIcon width={40} height={40} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Saller Name</Text>

@@ -1,11 +1,17 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import React, {useEffect} from 'react';
+import {useIsFocused} from '@react-navigation/native'; // Tambahkan ini
 import Logo from '../../assets/pictures/logo.png';
 
 const SplashScreen = ({navigation}) => {
+  const isFocused = useIsFocused(); // Periksa apakah komponen aktif
+
   useEffect(() => {
-    setTimeout(() => navigation.replace('SignIn'), 3000);
-  }, []);
+    if (isFocused) {
+      const timer = setTimeout(() => navigation.replace('SignIn'), 3000);
+      return () => clearTimeout(timer); // Bersihkan timer saat komponen unmount
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
@@ -27,9 +33,5 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 20,
-  },
-  title: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 32,
   },
 });

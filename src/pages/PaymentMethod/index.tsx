@@ -21,9 +21,28 @@ import CartIconFill from '../../assets/pictures/cart_fill.svg';
 import ProfileIconFill from '../../assets/pictures/profile_fill.svg';
 import telephoneIcon from '../../assets/pictures/telephoneIcon.png';
 import emailIcon from '../../assets/pictures/emailIcon.png';
+import {firestore} from '../../config/Firebase';
+import {collection, addDoc} from 'firebase/firestore';
+
+const addToFirebase = async paymentMethod => {
+  try {
+    const docRef = await addDoc(
+      collection(firestore, 'paymentMethods'),
+      paymentMethod,
+    );
+    console.log('Document written with ID: ', docRef.id);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+};
+
+const handlePaymentMethodSelect = async method => {
+  await addToFirebase(method); // Add to Firebase
+  console.log('Payment method selected:', method);
+};
 
 const PaymentMethod = () => {
-  const [activeTab, setActiveTab] = useState('Profile');
+  const [activeTab, setActiveTab] = useState('');
   return (
     <View style={styles.container}>
       <BackButton
@@ -35,8 +54,7 @@ const PaymentMethod = () => {
         <View style={styles.userInfo}>
           <Image source={ProfilePict} style={styles.profileImage} />
           <View style={styles.PersonalInfo}>
-
-          <Gap height={25} />
+            <Gap height={25} />
 
             <View style={styles.number}>
               <Image source={telephoneIcon} style={styles.phoneIcon} />
@@ -114,8 +132,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#ffffff',
 
-    fontWeight: 'bold'
-
+    fontWeight: 'bold',
   },
   PersonalInfo: {
     gap: 10,

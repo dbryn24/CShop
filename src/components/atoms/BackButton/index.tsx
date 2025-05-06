@@ -1,9 +1,16 @@
 import {StyleSheet, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
-const BackButton = ({imageSource, width = 40, height = 40}) => {
+const BackButton = ({ imageSource, width = 40, height = 40 }) => {
+  const navigation = useNavigation(); // Inisialisasi navigation
+
+  const handleGoBack = () => {
+    navigation.navigate('Home'); // Navigasi langsung ke halaman Home
+  };
+
   return (
-    <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+    <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={handleGoBack}>
       {imageSource && (
         <Image
           source={imageSource}
