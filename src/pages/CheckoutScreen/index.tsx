@@ -112,9 +112,11 @@ const CheckoutScreen = () => {
         <Text style={styles.totalText}>Total</Text>
         <Text style={styles.priceText}>Rp. {totalHarga}</Text>
       </View>
-      <View style={styles.bottomNavContainer}>
+      <TouchableOpacity
+        style={styles.bottomNavContainer}
+        onPress={() => navigation.navigate('PaymentMethod')}>
         <Text style={styles.paymentText}>Payment Method</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
